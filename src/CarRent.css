@@ -17,6 +17,34 @@ body {
   overflow-x: hidden;
 }
 
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px) translateY(40px) scale(1.1);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-20px) translateY(40px) scale(1.2);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* ===== HERO SECTION ===== */
 .car-rent-hero-section {
   background: linear-gradient(135deg, #358935 0%, #30913e 40%, #2d6a35 70%, #3a8a42 100%);
@@ -31,6 +59,7 @@ body {
   margin-top: 100px; /* SPACE FOR FIXED NAVBAR */
   margin-left: 20px;
   margin-right: 20px;
+  animation: fadeIn 1s ease-out;
 }
 
 .car-rent-hero-content {
@@ -38,6 +67,7 @@ body {
   max-width: 450px;
   z-index: 2;
   position: relative;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
 }
 
 .car-rent-hero-content h1 {
@@ -78,6 +108,7 @@ body {
   align-items: flex-end;
   z-index: 2;
   position: relative;
+  animation: fadeInRight 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
 }
 
 .car-rent-hero-car-image img {
@@ -98,6 +129,7 @@ body {
   box-shadow: 0 8px 32px rgba(0,0,0,0.12);
   z-index: 2;
   position: relative;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
 }
 
 .booking-card h3 {
@@ -248,7 +280,24 @@ body {
   background: #fff;
   box-shadow: 0 2px 12px rgba(0,0,0,0.05);
   transition: box-shadow 0.2s, transform 0.2s;
+  /* start hidden for entrance animation */
+  opacity: 0;
+  transform: translateY(18px);
 }
+
+/* When the grid gets the 'animate' class, reveal cards with staggered delays */
+.car-grid.animate .car-card {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.car-grid.animate .car-card:nth-child(1) { transition-delay: 0.05s; }
+.car-grid.animate .car-card:nth-child(2) { transition-delay: 0.12s; }
+.car-grid.animate .car-card:nth-child(3) { transition-delay: 0.19s; }
+.car-grid.animate .car-card:nth-child(4) { transition-delay: 0.26s; }
+.car-grid.animate .car-card:nth-child(5) { transition-delay: 0.33s; }
+.car-grid.animate .car-card:nth-child(6) { transition-delay: 0.40s; }
 
 .car-card:hover {
   box-shadow: 0 8px 24px rgba(0,0,0,0.1);
