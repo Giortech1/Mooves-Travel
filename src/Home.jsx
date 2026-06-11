@@ -48,10 +48,34 @@ const Home = () => {
       cta: "Explore Fleet",
       link: "#fleet"
     },
-    { image: slide2 },
-    { image: slide3 },
-    { image: slide4 },
-    { image: slide5 }
+    { 
+      image: slide2,
+      title: "Luxury Travel Redefined",
+      subtitle: "Travel in style with our high-end executive vehicle collection.",
+      cta: "Book Now",
+      link: "/login"
+    },
+    { 
+      image: slide3,
+      title: "Global Flight Booking",
+      subtitle: "Reach your destination with our seamless and affordable flight services.",
+      cta: "Check Flights",
+      link: "#"
+    },
+    { 
+      image: slide4,
+      title: "Corporate Fleet Management",
+      subtitle: "Optimized mobility solutions tailored for your business needs.",
+      cta: "Contact Us",
+      link: "/contact"
+    },
+    { 
+      image: slide5,
+      title: "Airport Transfer Services",
+      subtitle: "Punctual and comfortable pickups for a stress-free travel experience.",
+      cta: "Schedule Pickup",
+      link: "#"
+    }
   ];
 
   const fleetPreview = [
