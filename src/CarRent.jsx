@@ -2,13 +2,21 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './CarRent.css';
 import Navbar from './Navbar';
-import img1 from './assets/img slide 1.png';
-import img2 from './assets/logo.png';
-import img3 from './assets/foot1.png';
-import img4 from './assets/foot2.png';
-import img5 from './assets/foot3.png';
-import img6 from './assets/foot4.png';
-import img7 from './assets/foot5.png';
+import img1 from './assets/corola toyota.png';
+import img2 from './assets/car1.png';
+import img3 from './assets/2020_Mercedes-Benz_AMG_S_65-removebg-preview.png';
+import img4 from './assets/escalade-removebg-preview.png';
+import img5 from './assets/RAV4___TOYOTA_The_SUV__Redefined_-removebg-preview.png';
+import img6 from './assets/img 8.png';
+import img7 from './assets/img 1.png';
+import img8 from './assets/foot1.png';
+import img9 from './assets/foot2.png';
+import img10 from './assets/foot3.png';
+import img11 from './assets/foot4.png';
+import img12 from './assets/foot5.png';
+import img13 from './assets/logo.png';
+import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
+
 
 
 // ── Icons (inline SVG helpers) ──────────────────────────────────────
@@ -79,7 +87,7 @@ const cars = [
     name: 'Mercedes',
     type: 'Sedan',
     price: 25,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Mercedes_S-Class_%28W222%29_in_Minsk_%2846776591891%29.jpg/800px-Mercedes_S-Class_%28W222%29_in_Minsk_%2846776591891%29.jpg',
+    image: img2,
     features: ['Automat', 'PB 95', 'Air Conditioner'],
   },
   {
@@ -87,7 +95,7 @@ const cars = [
     name: 'Toyota Corola',
     type: 'SUV',
     price: 20,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/2019_Toyota_RAV4_%28MXAA52R%29_GXL_5-door_wagon_%282021-08-26%29_01.jpg/800px-2019_Toyota_RAV4_%28MXAA52R%29_GXL_5-door_wagon_%282021-08-26%29_01.jpg',
+    image: img3,
     features: ['Automat', 'PB 95', 'Air Conditioner'],
   },
   {
@@ -95,7 +103,7 @@ const cars = [
     name: 'Mercedes',
     type: 'Sedan',
     price: 30,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/2023_Mercedes-Benz_S-Class_%28Z223%29_S580e_sedan_%282023-11-09%29_01.jpg/800px-2023_Mercedes-Benz_S-Class_%28Z223%29_S580e_sedan_%282023-11-09%29_01.jpg',
+    image: img4,
     features: ['Automat', 'PB 95', 'Air Conditioner'],
   },
   {
@@ -103,7 +111,7 @@ const cars = [
     name: 'Toyota',
     type: 'Pickup',
     price: 25,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/2022_Toyota_HiLux_SR5_HiRider_%28facelift%2C_silver%29%2C_front_8.27.23.jpg/800px-2022_Toyota_HiLux_SR5_HiRider_%28facelift%2C_silver%29%2C_front_8.27.23.jpg',
+    image: img5,
     features: ['Automat', 'PB 95', 'Air Conditioner'],
   },
   {
@@ -111,7 +119,7 @@ const cars = [
     name: 'Toyota RAV 4',
     type: 'SUV',
     price: 25,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/2019_Toyota_RAV4_Adventure_2.5_Front.jpg/800px-2019_Toyota_RAV4_Adventure_2.5_Front.jpg',
+    image: img6,
     features: ['Automat', 'PB 95', 'Air Conditioner'],
   },
   {
@@ -119,7 +127,7 @@ const cars = [
     name: 'Toyota',
     type: 'Pickup',
     price: 20,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/2023_Toyota_Hilux_GR_Sport_SR5_Double_Cab_%28Australia%2C_red%29%2C_front_8.26.23.jpg/800px-2023_Toyota_Hilux_GR_Sport_SR5_Double_Cab_%28Australia%2C_red%29%2C_front_8.26.23.jpg',
+    image: img7,
     features: ['Automat', 'PB 95', 'Air Conditioner'],
   },
 ];
@@ -260,22 +268,22 @@ const CarRent = () => {
           {/* Brand */}
           <div className="footer-brand">
             <div className="footer-logo">
-                <img src={img2} alt="Mooves Logo" />
+                <img src={img13} alt="Mooves Logo" />
             </div>
             <p>Premium mobility, vehicle rental, fleet management, and ticketing solutions designed to deliver comfort, flexibility, and reliability.</p>
             <div className="app-badges">
               <div className="app-badge">
-                <img src={img3} alt="App Store" />
+                <img src={img8} alt="App Store" />
               </div>
               <div className="app-badge">
-                <img src={img4} alt="Google Play" />
+                <img src={img9} alt="Google Play" />
               </div>
             </div>
             <div className="social-links">
-              <div className="social-icon">f</div>
-              <div className="social-icon">in</div>
-              <div className="social-icon">tw</div>
-              <div className="social-icon">yt</div>
+              <div className="social-icon"><FaFacebook /></div>
+              <div className="social-icon"><FaInstagram /></div>
+              <div className="social-icon"><FaTwitter /></div>
+              <div className="social-icon"><FaYoutube /></div>
             </div>
           </div>
 
@@ -283,7 +291,7 @@ const CarRent = () => {
           <div className="footer-col">
             <div className="footer-contact-item">
               <div className="footer-contact-icon">
-                <img src={img5} alt="Address Icon" />
+                <img src={img12} alt="Address Icon" />
               </div>
               <div className="footer-contact-info">
                 <h5>Address</h5>
@@ -292,7 +300,7 @@ const CarRent = () => {
             </div>
             <div className="footer-contact-item">
               <div className="footer-contact-icon">
-                <img src={img6} alt="Email Icon" />
+                <img src={img11} alt="Email Icon" />
               </div>
               <div className="footer-contact-info">
                 <h5>Email</h5>
@@ -301,7 +309,7 @@ const CarRent = () => {
             </div>
             <div className="footer-contact-item">
               <div className="footer-contact-icon">
-                <img src={img7} alt="Phone Icon" />
+                <img src={img10} alt="Phone Icon" />
               </div>
               <div className="footer-contact-info">
                 <h5>Phone</h5>
