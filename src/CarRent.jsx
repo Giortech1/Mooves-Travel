@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './CarRent.css';
 import Navbar from './Navbar';
@@ -144,6 +144,28 @@ const filterTabs = [
 
 // ── Component ───────────────────────────────────────────────────────
 const CarRent = () => {
+  const gridRef = useRef(null);
+
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+
+    const obs = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            el.classList.add('animate');
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    obs.observe(el);
+
+    return () => obs.disconnect();
+  }, []);
   return (
     <div className="car-rent-container">
       <div>
@@ -234,7 +256,7 @@ const CarRent = () => {
         </div>
 
         {/* Car Grid */}
-        <div className="car-grid">
+        <div className="car-grid" ref={gridRef}>
           {cars.map(car => (
             <div key={car.id} className="car-card">
               <img src={car.image} alt={car.name} />
