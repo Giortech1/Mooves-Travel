@@ -312,8 +312,7 @@ const visibleVehicles = filteredVehicles.slice(vehiclePage * 2, vehiclePage * 2 
                 <h3 className='section-text'>{service.title}</h3>
                 <p>{service.description}</p>
               </div>
-            </div>
-        </div>
+            </div>))}
         </div>
       </section>
 

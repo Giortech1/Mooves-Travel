@@ -8,6 +8,10 @@ import appleIcon from './assets/apple.png';
 import eyeOffIcon from './assets/eye-off.png';
 import eyeIcon from './assets/eye.png';
 import { GoogleLogin } from '@react-oauth/google';
+import { auth } from './firebaseConfig'; // Importez votre instance Firebase client
+import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+
+
 
 const SignUp = () => {
   const [displayName, setDisplayName] = useState('');
@@ -76,21 +80,36 @@ const SignUp = () => {
     alert('Apple Sign-In nécessite une configuration supplémentaire.\nVoir la documentation pour les détails.');
     setLoading(false);
   };
-    // Handle Google login success
-    const handleGoogleSuccess = async (credentialResponse) => {
-  setLoading(true);
-  try {
-    await loginWithGoogle(credentialResponse.credential);
-    navigate('/home');
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+
 
 const handleGoogleError = () => {
   setError('Erreur lors de la connexion Google');
+};
+  
+  
+  // Handle email login
+const handleGoogleSuccess = async (credentialResponse) => {
+  try {
+    setLoading(true);
+    
+    // 1. Créer un credential Firebase à partir du token Google reçu
+    const credential = GoogleAuthProvider.credential(credentialResponse.credential);
+    
+    // 2. Se connecter à Firebase avec ce credential (côté client)
+    const userCredential = await signInWithCredential(auth, credential);
+    
+    // 3. Récupérer le VRAI ID Token de Firebase
+    const firebaseIdToken = await userCredential.user.getIdToken();
+    
+    // 4. Envoyer ce token Firebase à votre backend
+    await loginWithGoogle(firebaseIdToken);
+    
+    navigate('/');
+  } catch (err) {
+    setError("Erreur d'échange de token : " + err.message);
+  } finally {
+    setLoading(false);
+  }
 };
   return (
     <div className="login-container">
