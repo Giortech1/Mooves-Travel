@@ -6,10 +6,6 @@ import SuccessReset from './SuccessReset';
 import Home from './Home';
 import CarRent from './CarRent';
 import BusinessSolution from './BusinessSolution';
-import FlightBooking from './FlightBooking';
-import Fleet from './Fleet';
-import About from './About';
-import Contact from './Contact';
 
 function App() {
   return (
@@ -22,10 +18,6 @@ function App() {
         <Route path="/success-reset" element={<SuccessReset />} />
         <Route path="/car-rent" element={<CarRent />} />
         <Route path="/business-solution" element={<BusinessSolution />} />
-        <Route path="/flight-booking" element={<FlightBooking />} />
-        <Route path="/fleet" element={<Fleet />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
   );

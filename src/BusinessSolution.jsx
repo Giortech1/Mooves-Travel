@@ -52,7 +52,9 @@ function BusinessSolution() {
         <div className="challenge-cards">
 
           <div className="card">
-            <FaMoneyBillWave className="icon" />
+            <div className="icon-box">
+              <FaMoneyBillWave />
+            </div>
             <h3>High Transportation Costs</h3>
             <p>
               Reduce unnecessary expenses with optimized mobility plans.
@@ -60,7 +62,9 @@ function BusinessSolution() {
           </div>
 
           <div className="card">
-            <FaCar className="icon" />
+            <div className="icon-box">
+              <FaCar />
+            </div>
             <h3>Poor Fleet Utilization</h3>
             <p>
               Maximize vehicle usage and operational efficiency.
@@ -68,7 +72,9 @@ function BusinessSolution() {
           </div>
 
           <div className="card">
-            <FaClock className="icon" />
+            <div className="icon-box">
+              <FaClock />
+            </div>
             <h3>Employee Travel Delays</h3>
             <p>
               Ensure reliable transportation for your workforce.
@@ -76,7 +82,9 @@ function BusinessSolution() {
           </div>
 
           <div className="card">
-            <FaCog className="icon" />
+            <div className="icon-box">
+              <FaCog />
+            </div>
             <h3>Complex Mobility Management</h3>
             <p>
               Manage transportation from one centralized platform.

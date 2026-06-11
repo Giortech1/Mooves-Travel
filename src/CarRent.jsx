@@ -137,18 +137,20 @@ const filterTabs = [
 // ── Component ───────────────────────────────────────────────────────
 const CarRent = () => {
   return (
-    <div className="home-container">
-      <Navbar />
+    <div className="car-rent-container">
+      <div>
+        <Navbar />
+      </div>
 
       {/* HERO */}
-      <section className="hero-section">
-        <div className="hero-content">
+      <section className="car-rent-hero-section">
+        <div className="car-rent-hero-content">
           <h1>Find the Perfect Vehicle for Every Journey</h1>
           <p>Explore our diverse fleet of luxury, business, SUV, and utility vehicles designed to meet your personal and professional transportation needs.</p>
-          <button className="hero-cta">View All Cars</button>
+          <button className="car-rent-hero-cta">View All Cars</button>
         </div>
 
-        <div className="hero-car-image">
+        <div className="car-rent-hero-car-image">
           <img
             src={img1}
             alt="Featured car"
