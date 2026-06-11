@@ -237,16 +237,76 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: white; /* Changed from background-size/position */
   opacity: 0;
   transition: opacity 1s ease-in-out;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding: 0 10%;
+}
+
+.slide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,0.6), rgba(0,0,0,0.2));
+  z-index: 1;
 }
 
 .slide.active {
   opacity: 1;
+}
+
+.slide-content {
+  position: relative;
+  z-index: 2;
+  color: white;
+  max-width: 600px;
+  animation: slideUp 0.8s ease forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-content h1 {
+  font-size: 56px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  line-height: 1.1;
+}
+
+.slide-content p {
+  font-size: 20px;
+  margin-bottom: 35px;
+  opacity: 0.9;
+}
+
+.slide-cta {
+  display: inline-block;
+  padding: 15px 40px;
+  background-color: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  font-size: 18px;
+}
+
+.slide-cta:hover {
+  background-color: #1ea972;
+  transform: scale(1.05);
 }
 
 /* Removed slide::before overlay and slide.slide-1 specific styles */
@@ -584,6 +644,7 @@
   padding: 100px 5%;
   background-color: #176A41; /* Green background */
   color: #F5F2E0; /* Cream text */
+  scroll-margin-top: 80px;
 }
 
 .fleet-container-inner {
@@ -591,74 +652,35 @@
   margin: 0 auto;
 }
 
-.fleet-header-right {
-  text-align: right;
+.fleet-header-left {
+  text-align: left;
   margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.fleet-header-right h2 {
+.fleet-header-left h2 {
   font-size: 36px;
   font-weight: 700;
   color: #F5F2E0;
   margin: 0 0 15px 0;
+  max-width: 600px;
 }
 
 .fleet-divider {
   height: 2px;
   background-color: #F5F2E0;
-  width: 100%;
+  width: 150px;
   margin-bottom: 30px;
 }
 
-.fleet-categories {
+.home-fleet-grid {
   display: flex;
-  gap: 15px;
+  justify-content: flex-start;
+  gap: 30px;
   margin-bottom: 50px;
   flex-wrap: wrap;
-}
-
-.fleet-cat-btn {
-  padding: 10px 25px;
-  border: 1.5px solid #F5F2E0;
-  background: transparent;
-  color: #F5F2E0;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 15px;
-}
-
-.fleet-cat-btn:hover {
-  background-color: rgba(245, 242, 224, 0.1);
-}
-
-.fleet-cat-btn.active {
-  background-color: white;
-  color: black;
-  border-color: white;
-}
-
-.home-fleet-carousel-container {
-  position: relative;
-  margin-bottom: 40px;
-  display: flex;
-  align-items: center;
-}
-
-.home-fleet-carousel {
-  display: flex;
-  gap: 30px;
-  overflow-x: auto;
-  padding: 20px 10px 40px;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  width: 100%;
-}
-
-.home-fleet-carousel::-webkit-scrollbar {
-  display: none;
 }
 
 .no-fleet-msg {
@@ -670,8 +692,10 @@
 }
 
 .home-car-card {
-  min-width: 320px;
-  background-color: white;
+  width: 48%;
+  min-width: 400px;
+  max-width: 600px;
+  background-color: #F5F2E0;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -685,8 +709,8 @@
 }
 
 .home-car-image {
-  height: 200px;
-  background-color: #fcfcfc;
+  height: 250px;
+  background-color: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -701,23 +725,23 @@
 }
 
 .home-car-info {
-  padding: 20px;
-  color: #333; /* Dark text for readability on white card */
+  padding: 30px;
+  color: #176A41;
 }
 
 .home-car-type {
-  font-size: 11px;
+  font-size: 12px;
   color: #EB4335;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 .home-car-info h3 {
   margin: 0 0 15px 0;
-  font-size: 20px;
+  font-size: 24px;
   color: #176A41;
   font-weight: 700;
 }
@@ -726,25 +750,26 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 20px;
 }
 
 .home-car-price {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  color: #333;
+  color: #176A41;
   margin: 0;
 }
 
 .home-car-price span {
-  font-size: 12px;
-  color: #888;
+  font-size: 14px;
+  color: #555;
   font-weight: 400;
 }
 
 .home-book-btn {
-  padding: 10px 20px;
+  padding: 12px 25px;
   background-color: #176A41;
-  color: white;
+  color: #F5F2E0;
   border: none;
   border-radius: 8px;
   font-weight: 600;
@@ -754,45 +779,12 @@
 
 .home-book-btn:hover {
   background-color: #EB4335;
-}
-
-.fleet-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: white;
-  border: none;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  z-index: 10;
-  transition: all 0.3s ease;
-}
-
-.fleet-arrow:hover {
-  background-color: #F5F2E0;
-}
-
-.fleet-arrow img {
-  width: 18px;
-  transition: all 0.3s ease;
-}
-
-.fleet-arrow.prev {
-  left: -22px;
-}
-
-.fleet-arrow.next {
-  right: -22px;
+  color: white;
 }
 
 .fleet-footer-link {
-  text-align: center;
+  text-align: left;
+  margin-top: 20px;
 }
 
 .view-all-fleet {

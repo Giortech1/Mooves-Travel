@@ -18,10 +18,6 @@ import img9 from './assets/img 9.png';
 // Fleet Assets
 import mercedes from './assets/2020_Mercedes-Benz_AMG_S_65-removebg-preview.png';
 import urus from './assets/ABT_Lamborghini_Urus_Scatenato_2024-removebg-preview.png';
-import corolla from './assets/corola toyota.png';
-import rav4 from './assets/RAV4___TOYOTA_The_SUV__Redefined_-removebg-preview.png';
-import leftArrow from './assets/left arrow.png';
-import rightArrow from './assets/right arrow.png';
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -33,12 +29,16 @@ const Home = () => {
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   
-  const fleetRef = useRef(null);
-
   const slides = [
-    { image: "" },
-    { image: "" },
-    { image: "" },
+    { 
+      image: slide1,
+      title: "Premium Mobility Solutions",
+      subtitle: "Experience comfort, reliability, and exceptional service on every journey.",
+      cta: "Explore Fleet",
+      link: "#fleet"
+    },
+    { image: slide2 },
+    { image: slide3 },
     { image: "" },
     { image: "" }
   ];
@@ -46,23 +46,7 @@ const Home = () => {
   const fleetPreview = [
     { id: 1, name: "Mercedes-Benz AMG S 65", image: mercedes, price: "$200/day", type: "Luxury" },
     { id: 2, name: "Lamborghini Urus", image: urus, price: "$500/day", type: "Exotic" },
-    { id: 3, name: "Toyota Corolla", image: corolla, price: "$50/day", type: "Economy" },
-    { id: 4, name: "Toyota RAV4", image: rav4, price: "$80/day", type: "SUV" },
   ];
-
-  const fleetCategories = ['All', 'Luxury', 'Exotic', 'Economy', 'SUV'];
-  const [activeFleetCategory, setActiveFleetCategory] = useState('All');
-  const filteredFleet = activeFleetCategory === 'All'
-    ? fleetPreview
-    : fleetPreview.filter((car) => car.type === activeFleetCategory);
-
-  const scrollFleet = (direction) => {
-    if (fleetRef.current) {
-      const { scrollLeft, clientWidth } = fleetRef.current;
-      const scrollTo = direction === 'left' ? scrollLeft - clientWidth / 2 : scrollLeft + clientWidth / 2;
-      fleetRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
-    }
-  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -184,11 +168,27 @@ const Home = () => {
           <button className="slider-btn prev" onClick={prevSlide}>&#10094;</button>
           <button className="slider-btn next" onClick={nextSlide}>&#10095;</button>
           
-          {slides.map((_, index) => (
+          {slides.map((slide, index) => (
             <div
               key={index}
               className={`slide ${index === currentSlide ? 'active' : ''}`}
+              style={{ 
+                backgroundImage: slide.image ? `url("${slide.image}")` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
             >
+              {slide.title && (
+                <div className="slide-content">
+                  <h1>{slide.title}</h1>
+                  <p>{slide.subtitle}</p>
+                  {slide.cta && (
+                    <a href={slide.link} className="slide-cta">
+                      {slide.cta}
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
           ))}
 
@@ -355,53 +355,29 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="home-fleet-section">
+      <section className="home-fleet-section" id="fleet">
         <div className="fleet-container-inner">
-          <div className="fleet-header-right">
+          <div className="fleet-header-left">
             <h2>Explore Our Premium Vehicle Collection</h2>
             <div className="fleet-divider"></div>
           </div>
 
-          <div className="fleet-categories">
-            {fleetCategories.map((cat) => (
-              <button 
-                key={cat}
-                className={`fleet-cat-btn ${activeFleetCategory === cat ? 'active' : ''}`}
-                onClick={() => setActiveFleetCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-          
-          <div className="home-fleet-carousel-container">
-            <button className="fleet-arrow prev" onClick={() => scrollFleet('left')}>
-              <img src={leftArrow} alt="Prev" />
-            </button>
-            
-            <div className="home-fleet-carousel" ref={fleetRef}>
-              {filteredFleet.length > 0 ? filteredFleet.map((car) => (
-                <div key={car.id} className="home-car-card">
-                  <div className="home-car-image">
-                    <img src={car.image} alt={car.name} />
-                  </div>
-                  <div className="home-car-info">
-                    <span className="home-car-type">{car.type}</span>
-                    <h3>{car.name}</h3>
-                    <div className="home-car-footer">
-                      <p className="home-car-price">{car.price}<span>/day</span></p>
-                      <button className="home-book-btn">Rent Now</button>
-                    </div>
+          <div className="home-fleet-grid">
+            {fleetPreview.map((car) => (
+              <div key={car.id} className="home-car-card">
+                <div className="home-car-image">
+                  <img src={car.image} alt={car.name} />
+                </div>
+                <div className="home-car-info">
+                  <span className="home-car-type">{car.type}</span>
+                  <h3>{car.name}</h3>
+                  <div className="home-car-footer">
+                    <p className="home-car-price">{car.price}<span>/day</span></p>
+                    <button className="home-book-btn">Rent Now</button>
                   </div>
                 </div>
-              )) : (
-                <p className="no-fleet-msg">No vehicles found in this category.</p>
-              )}
-            </div>
-
-            <button className="fleet-arrow next" onClick={() => scrollFleet('right')}>
-              <img src={rightArrow} alt="Next" />
-            </button>
+              </div>
+            ))}
           </div>
           
           <div className="fleet-footer-link">
