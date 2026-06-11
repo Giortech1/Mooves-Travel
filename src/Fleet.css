@@ -1,0 +1,398 @@
+.fleet-page {
+  font-family: 'Poppins', sans-serif;
+  color: #1e293b;
+  padding-top: 90px; /* clear fixed navbar */
+}
+
+/* HERO */
+.fleet-hero {
+  background: linear-gradient(135deg, #16a673, #0e8c5f);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 60px 60px 0;
+  border-radius: 0 0 30px 30px;
+  overflow: hidden;
+  position: relative;
+  min-height: 320px;
+}
+
+.fleet-hero-text {
+  flex: 1 1 400px;
+  z-index: 2;
+}
+
+.fleet-hero-text h1 {
+  font-size: 2.6rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.fleet-hero-text p {
+  max-width: 480px;
+  margin-bottom: 24px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+.fleet-hero-buttons {
+  display: flex;
+  gap: 14px;
+}
+
+.btn-outline {
+  background: rgb(245, 163, 11);
+  border: 1.5px solid #fff;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-white {
+  background: #fff;
+  color: #16a673;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fleet-hero-image {
+  flex: 1 1 400px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.fleet-hero-image img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* FILTER BAR */
+.fleet-filter-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: -28px;
+  position: relative;
+  z-index: 5;
+}
+
+.fleet-filter {
+  background: #fff;
+  border-radius: 50px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: 30px;
+  padding: 16px 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.fleet-filter span {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.fleet-filter span.active {
+  color: #16a673;
+  font-weight: 700;
+}
+
+/* VEHICLE GRID */
+.fleet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 60px;
+  background: #f8f9fb;
+}
+
+.vehicle-card {
+  background: #f1f5f9;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.vehicle-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.vehicle-info {
+  padding: 16px 20px 20px;
+}
+
+.vehicle-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.vehicle-title-row h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.vehicle-type {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.vehicle-price {
+  text-align: right;
+  font-weight: 700;
+  color: #f6b93b;
+  font-size: 1.1rem;
+}
+
+.vehicle-price span {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #94a3b8;
+}
+
+.vehicle-specs {
+  display: flex;
+  gap: 16px;
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.vehicle-specs span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-view {
+  width: 100%;
+  background: #16a673;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* VIEW ALL */
+.view-all-wrapper {
+  display: flex;
+  justify-content: center;
+  background: #f8f9fb;
+  padding-bottom: 60px;
+}
+
+.btn-view-all {
+  background: #fff;
+  border: 1.5px solid #cbd5e1;
+  color: #334155;
+  padding: 12px 32px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* WHY OUR FLEET */
+.fleet-why {
+  background: #16a673;
+  color: #fff;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  padding: 50px 60px;
+  align-items: center;
+}
+
+.why-title h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.why-item {
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+  padding-left: 24px;
+}
+
+.why-item h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.why-item p {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* FLEET MANAGEMENT */
+.fleet-management {
+  display: flex;
+  background: #16a673;
+  color: #fff;
+  align-items: stretch;
+}
+
+.management-image {
+  flex: 1 1 45%;
+}
+
+.management-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.management-content {
+  flex: 1 1 55%;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.management-content h3 {
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.management-content h2 {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+  max-width: 500px;
+}
+
+.management-content p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 480px;
+  margin-bottom: 30px;
+  opacity: 0.95;
+}
+
+.management-stats {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  gap: 8px;
+}
+
+.stat-icon {
+  background: rgba(255, 255, 255, 0.15);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .fleet-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .fleet-why {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .why-item {
+    border-left: none;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .fleet-hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px 20px 0;
+  }
+
+  .fleet-hero-buttons {
+    justify-content: center;
+  }
+
+  .fleet-grid {
+    grid-template-columns: 1fr;
+    padding: 40px 20px;
+  }
+
+  .fleet-why {
+    grid-template-columns: 1fr;
+    padding: 40px 20px;
+  }
+
+  .fleet-management {
+    flex-direction: column;
+  }
+
+  .management-content {
+    padding: 40px 20px;
+  }
+}
+
+.footer {
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+  padding: 48px 60px 24px;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.5fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-brand .footer-logo {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 12px;
+}
+
+.footer-brand p {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}

@@ -6,6 +6,8 @@ import logo from './assets/logo.png';
 import slide1 from './assets/img slide 1.png';
 import slide2 from './assets/img slide 2.png';
 import slide3 from './assets/img slide 3.png';
+import slide4 from './assets/img slide 4.png';
+import slide5 from './assets/img slide 5.png';
 import img1 from './assets/Img 1.png';
 import img2 from './assets/img 2.jfif';
 import img3 from './assets/img 3.png';
@@ -17,17 +19,19 @@ import img8 from './assets/img 8.png';
 import img9 from './assets/img 9.png';
 
 // Fleet Assets
-import mercedes from './assets/2020_Mercedes-Benz_AMG_S_65-removebg-preview.png';
-import urus from './assets/ABT_Lamborghini_Urus_Scatenato_2024-removebg-preview.png';
-import corolla from './assets/corola toyota.png';
-import rav4 from './assets/RAV4___TOYOTA_The_SUV__Redefined_-removebg-preview.png';
-import leftArrow from './assets/left arrow.png';
+
 import rightArrow from './assets/right arrow.png';
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activeCategory, setActiveCategory] = useState("all");
   const [vehiclePage, setVehiclePage] = useState(0);
+  const [activeService, setActiveService] = useState('car');
+  const [showClassDropdown, setShowClassDropdown] = useState(false);
+  const [flightClass, setFlightClass] = useState('Economy');
+  const [showTravelers, setShowTravelers] = useState(false);
+  const [adults, setAdults] = useState(1);
+  const [children, setChildren] = useState(0);
   const slides = [
     { image: "" },
     { image: "" },
@@ -36,18 +40,7 @@ const Home = () => {
     { image: "" }
   ];
 
-  const fleetPreview = [
-    { id: 1, name: "Mercedes-Benz AMG S 65", image: mercedes, price: "$200/day", type: "Luxury" },
-    { id: 2, name: "Lamborghini Urus", image: urus, price: "$500/day", type: "Exotic" },
-    { id: 3, name: "Toyota Corolla", image: corolla, price: "$50/day", type: "Economy" },
-    { id: 4, name: "Toyota RAV4", image: rav4, price: "$80/day", type: "SUV" },
-  ];
-
-  const fleetCategories = ['All', 'Luxury', 'Exotic', 'Economy', 'SUV'];
-  const [activeFleetCategory, setActiveFleetCategory] = useState('All');
-  const filteredFleet = activeFleetCategory === 'All'
-    ? fleetPreview
-    : fleetPreview.filter((car) => car.type === activeFleetCategory);
+  const fleetRef = useRef(null);
 
   const scrollFleet = (direction) => {
     if (fleetRef.current) {
@@ -137,13 +130,6 @@ const Home = () => {
       link: "#"
     }
   ];
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [slides.length]);
 
   const vehicles = [
   { id: 1, name: "Cadillac Escalade", price: "$450/day", seats: 7, transmission: "Automatic", fuel: "Gasoline", category: ["all", "suv"],     image: slide1 },
@@ -318,20 +304,21 @@ const visibleVehicles = filteredVehicles.slice(vehiclePage * 2, vehiclePage * 2 
           <h2 className="section-text">OUR SERVICES</h2>
           <p>With years of experience and a dedicated team, we provide <br /><strong className='s-strong'>Premium mobility</strong> solutions designed for <strong className='s-strong'>comfort, reliability, and exceptional service.</strong></p>
         </div>
-        <div className="destinations-grid">
-          {/* Placeholder for destinations */}
-          <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide1})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Car Rental</h3>
-              <p>Choose from a wide range of reliable, luxury, and utility vehicles designed to give you comfort, flexibility, and confidence on every journey.</p>
+          <div className="destinations-grid">
+          {services.slice(0, 4).map((service) => (
+            <div key={service.id} className="dest-card">
+              <div className="dest-image" style={{ backgroundImage: `url(${service.image})` }}></div>
+              <div className="dest-info">
+                <h3 className='section-text'>{service.title}</h3>
+                <p>{service.description}</p>
+              </div>
             </div>
         </div>
         </div>
       </section>
 
       <section className="home-fleet-section">
-        <div className="fleet-container-inner">
+        <div className="fleet-container-inner" ref={fleetRef}>
           <div className="fleet-header-right">
             <h2>Explore Our Premium Vehicle Collection</h2>
             <div className="fleet-divider"></div>
