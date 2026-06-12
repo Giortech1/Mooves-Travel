@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+
+import { useEffect, useRef } from 'react';
+// Link not used in this component
 import './CarRent.css';
 import Navbar from './Navbar';
 import img1 from './assets/corola toyota.png';
