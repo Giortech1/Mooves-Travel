@@ -9,7 +9,7 @@ import img3 from './assets/2020_Mercedes-Benz_AMG_S_65-removebg-preview.png';
 import img4 from './assets/escalade-removebg-preview.png';
 import img5 from './assets/RAV4___TOYOTA_The_SUV__Redefined_-removebg-preview.png';
 import img6 from './assets/img 8.png';
-import img7 from './assets/img 1.png';
+import img7 from './assets/Img 1.png';
 import img8 from './assets/foot1.png';
 import img9 from './assets/foot2.png';
 import img10 from './assets/foot3.png';

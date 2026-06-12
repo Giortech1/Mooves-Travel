@@ -22,7 +22,7 @@ import visa from "./assets/visa.jpg";
 import driver from "./assets/img 5.png";
 import leasing from "./assets/busines_cooporate-removebg-preview.png";
 import airport from "./assets/plane.jpg";
-import pickup from "./assets/img 1.png";
+import pickup from "./assets/Img 1.png";
 import fleet from "./assets/Creative_Poster_Design-removebg-preview.png";
 import luxury from "./assets/luxury.jpg";
 import fleet1 from "./assets/fleet.jpg";
