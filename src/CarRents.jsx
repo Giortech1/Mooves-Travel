@@ -9,7 +9,7 @@ import urus from './assets/ABT_Lamborghini_Urus_Scatenato_2024-removebg-preview.
 import corolla from './assets/corola toyota.png';
 import rav4 from './assets/RAV4___TOYOTA_The_SUV__Redefined_-removebg-preview.png';
 import escalade from './assets/escalade-removebg-preview.png';
-import black4x4 from './assets/black_4x4-removebg-preview.png';
+import black4x4 from './assets/white_4X4_car-removebg-preview.png';
 import mercedesS from './assets/Mercedes_S_class-removebg-preview.png';
 
 const CarRents = () => {
