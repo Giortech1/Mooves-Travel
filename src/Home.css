@@ -7,6 +7,12 @@
   background: #0f172a;
 }
 
+@media (max-width: 768px) {
+  .hero-slider {
+    height: 400px;
+  }
+}
+
 .hero-slide {
   position: absolute;
   top: 0;
@@ -176,9 +182,16 @@
   border-radius: 15px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   gap: 20px;
-  align-items: stretch; /* make children fill the search-card height */
+  align-items: stretch;
   width: 95%;
   max-width: 1300px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1024px) {
+  .search-bar {
+    padding: 25px;
+  }
 }
 
 .search-main {
@@ -186,6 +199,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  min-width: 300px;
 }
 
 .flight-options-top {
@@ -250,12 +264,20 @@
   display: flex;
   gap: 20px;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .search-item {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-width: 200px;
+}
+
+@media (max-width: 600px) {
+  .search-item {
+    min-width: 100%;
+  }
 }
 
 .search-item label {

@@ -81,3 +81,73 @@
 .nav-login:hover {
   background-color: rgba(37, 196, 132, 0.1);
 }
+
+.menu-icon {
+  display: none;
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+.nav-auth-mobile {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 15px 20px;
+  }
+
+  .nav-links {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 900px) {
+  .menu-icon {
+    display: block;
+    z-index: 1001;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 250px;
+    height: 100vh;
+    background-color: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 80px 30px;
+    transition: 0.3s ease-in-out;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  .nav-links.active {
+    right: 0;
+  }
+
+  .nav-links li {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .nav-auth {
+    display: none;
+  }
+
+  .nav-auth-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+  }
+
+  .nav-auth-mobile .nav-login,
+  .nav-auth-mobile .nav-signup {
+    width: 100%;
+  }
+}

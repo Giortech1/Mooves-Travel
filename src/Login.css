@@ -152,6 +152,25 @@
   margin-bottom: 32px;
 }
 
+@media (max-width: 480px) {
+  .login-card {
+    padding: 30px 20px;
+  }
+  
+  .social-login {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+  
+  .logo {
+    width: 180px;
+  }
+}
+
 .social-button {
   flex: 1;
   display: flex;

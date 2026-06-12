@@ -34,6 +34,12 @@ input {
   outline: none;
 }
 
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* Global card reveal animation */
 [class*="card"], [class*="Card"] {
   opacity: 0;
