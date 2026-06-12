@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/Mooves-Travel/',
   plugins: [react()],  server: {
     headers: {
       'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
