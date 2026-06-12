@@ -27,34 +27,98 @@
   width: 100%;
   height: 100%;
   opacity: 0;
-  transition: opacity 1s ease-in-out;
+  visibility: hidden;
+  transition: opacity 1.2s ease-in-out, visibility 1.2s;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding: 0 10%;
-}
-
-.slide::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to right, rgba(0,0,0,0.6), rgba(0,0,0,0.2));
   z-index: 1;
 }
 
 .slide.active {
   opacity: 1;
+  visibility: visible;
+  z-index: 2;
+}
+
+.slide-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 8s linear;
+  transform: scale(1.15);
+  z-index: -2;
+}
+
+.slide.active .slide-image {
+  transform: scale(1);
+}
+
+.slide-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.2));
+  z-index: -1;
 }
 
 .slide-content {
   position: relative;
-  z-index: 2;
+  z-index: 10;
   color: white;
-  max-width: 600px;
-  animation: slideUp 0.8s ease forwards;
+  max-width: 800px;
+}
+
+.slide-content h1 {
+  font-size: 64px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  line-height: 1.1;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s;
+}
+
+.slide-content p {
+  font-size: 22px;
+  margin-bottom: 40px;
+  opacity: 0.9;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s;
+}
+
+.slide-cta {
+  display: inline-block;
+  padding: 18px 45px;
+  background-color: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  border-radius: 50px;
+  font-size: 18px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s;
+}
+
+.slide.active .slide-content h1,
+.slide.active .slide-content p,
+.slide.active .slide-content .slide-cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide-cta:hover {
+  background-color: #1ea972;
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
 @keyframes slideUp {
@@ -68,37 +132,7 @@
   }
 }
 
-.slide-content h1 {
-  font-size: 56px;
-  font-weight: 800;
-  margin-bottom: 20px;
-  line-height: 1.1;
-}
-
-.slide-content p {
-  font-size: 20px;
-  margin-bottom: 35px;
-  opacity: 0.9;
-}
-
-.slide-cta {
-  display: inline-block;
-  padding: 15px 40px;
-  background-color: var(--primary-color);
-  color: white;
-  text-decoration: none;
-  font-weight: 700;
-  border-radius: 50px;
-  transition: all 0.3s ease;
-  font-size: 18px;
-}
-
-.slide-cta:hover {
-  background-color: #1ea972;
-  transform: scale(1.05);
-}
-
-/* Removed slide::before overlay and slide.slide-1 specific styles */
+/* Rest of slide styles */
 
 .slider-btn {
   position: absolute;
@@ -210,7 +244,7 @@
   border-radius: 15px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   gap: 20px;
-  align-items: flex-end;
+  align-items: stretch; /* make children fill the search-card height */
   width: 95%;
   max-width: 1300px;
 }
@@ -315,12 +349,18 @@
 }
 
 .btn-search {
-  padding: 12px 30px;
+  /* fill the full height of the search card */
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 60px;
+  min-height: 64px;
   background-color: var(--primary-color);
   color: white;
-  border-radius: 6px;
-  font-weight: 600;
-  transition: opacity 0.2s;
+  border-radius: 8px;
+  font-weight: 700;
+  transition: opacity 0.2s, background-color 0.2s;
 }
 
 .done-btn:hover {

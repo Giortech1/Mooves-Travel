@@ -34,11 +34,6 @@ const Home = () => {
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
   const [vehiclePage, setVehiclePage] = useState(0);
-  const [activeFleetCategory, setActiveFleetCategory] = useState('All');
-
-  const fleetCategories = ['All', 'Luxury', 'SUV', 'Economy', 'Pickup'];
-  
-  const fleetRef = useRef(null);
 
   const slides = [
     { 
@@ -77,23 +72,6 @@ const Home = () => {
       link: "#"
     }
   ];
-
-  const fleetPreview = [
-    { id: 1, name: "Mercedes-Benz AMG S 65", image: mercedes, price: "$200/day", type: "Luxury" },
-    { id: 2, name: "Lamborghini Urus", image: urus, price: "$500/day", type: "Exotic" },
-  ];
-
-  const filteredFleet = activeFleetCategory === 'All' 
-    ? fleetPreview 
-    : fleetPreview.filter(car => car.type === activeFleetCategory);
-
-  const scrollFleet = (direction) => {
-    if (fleetRef.current) {
-      const { scrollLeft, clientWidth } = fleetRef.current;
-      const scrollTo = direction === 'left' ? scrollLeft - clientWidth : scrollLeft + clientWidth;
-      fleetRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
-    }
-  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -177,12 +155,12 @@ const Home = () => {
   ];
 
   const vehicles = [
-  { id: 1, name: "Cadillac Escalade", price: "$450/day", seats: 7, transmission: "Automatic", fuel: "Gasoline", category: ["all", "suv"],     image: slide1 },
-  { id: 2, name: "Lamborghini Urus",  price: "$500/day", seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "luxury"],  image: slide2 },
-  { id: 3, name: "Mercedes S-Class",  price: "$380/day", seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "luxury"],  image: slide3 },
-  { id: 4, name: "Range Rover Sport", price: "$420/day", seats: 7, transmission: "Automatic", fuel: "Diesel",   category: ["all", "suv"],     image: slide4 },
-  { id: 5, name: "Toyota Hilux",      price: "$180/day", seats: 5, transmission: "Manual",    fuel: "Diesel",   category: ["all", "pickup"],  image: slide5 },
-  { id: 6, name: "Toyota Corolla",    price: "$90/day",  seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "economy"], image: slide1 },
+  { id: 1, name: "Mercedes-Benz AMG S 65", price: "$200/day", seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "luxury"], image: mercedes },
+  { id: 2, name: "Lamborghini Urus",      price: "$500/day", seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "luxury"], image: urus },
+  { id: 3, name: "Cadillac Escalade",    price: "$450/day", seats: 7, transmission: "Automatic", fuel: "Gasoline", category: ["all", "suv"],    image: slide1 },
+  { id: 4, name: "Range Rover Sport",    price: "$420/day", seats: 7, transmission: "Automatic", fuel: "Diesel",   category: ["all", "suv"],    image: slide4 },
+  { id: 5, name: "Toyota Hilux",         price: "$180/day", seats: 5, transmission: "Manual",    fuel: "Diesel",   category: ["all", "pickup"], image: slide5 },
+  { id: 6, name: "Toyota Corolla",       price: "$90/day",  seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "economy"], image: slide1 },
 ];
 
 const filteredVehicles = vehicles.filter(v => v.category.includes(activeCategory));
@@ -202,12 +180,15 @@ const visibleVehicles = filteredVehicles.slice(vehiclePage * 2, vehiclePage * 2 
             <div
               key={index}
               className={`slide ${index === currentSlide ? 'active' : ''}`}
-              style={{ 
-                backgroundImage: slide.image ? `url("${slide.image}")` : 'none',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-              }}
             >
+              <div 
+                className="slide-image" 
+                style={{ 
+                  backgroundImage: slide.image ? `url("${slide.image}")` : 'none'
+                }}
+              ></div>
+              <div className="slide-overlay"></div>
+              
               {slide.title && (
                 <div className="slide-content">
                   <h1>{slide.title}</h1>
@@ -378,111 +359,61 @@ const visibleVehicles = filteredVehicles.slice(vehiclePage * 2, vehiclePage * 2 
         </div>
       </section>
 
-      <section className="home-fleet-section" id="fleet">
-        <div className="fleet-container-inner">
-          <div className="fleet-header-left">
-            <h2>Explore Our Premium Vehicle Collection</h2>
-            <div className="fleet-divider"></div>
-          </div>
+      <section className="premium-content" id="fleet">
+        <div className='premium-service'>
+          <h2 className='premium-text'>Explore Our Premium Vehicle Collection</h2>
+          <hr className='white-line'/>
 
-          <div className="fleet-categories">
-            {fleetCategories.map((cat) => (
-              <button 
+          <div className='vehicle-categories'>
+            {["all", "luxury", "suv", "economy", "pickup"].map(cat => (
+              <button
                 key={cat}
-                className={`fleet-cat-btn ${activeFleetCategory === cat ? 'active' : ''}`}
-                onClick={() => setActiveFleetCategory(cat)}
+                className={activeCategory === cat ? "active-btn" : ""}
+                onClick={() => { setActiveCategory(cat); setVehiclePage(0); }}
               >
-                {cat}
+                {cat === "all" ? "All" : cat === "suv" ? "SUVs" : cat.charAt(0).toUpperCase() + cat.slice(1)}
               </button>
             ))}
           </div>
-          
-          <div className="home-fleet-carousel-container">
-            <button className="fleet-arrow prev" onClick={() => scrollFleet('left')}>
-              <img src={leftArrow} alt="Prev" />
-            </button>
-            
-            <div className="home-fleet-carousel" ref={fleetRef}>
-              {filteredFleet.length > 0 ? filteredFleet.map((car) => (
-                <div key={car.id} className="home-car-card">
-                  <div className="home-car-image">
-                    <img src={car.image} alt={car.name} />
-                  </div>
-                  <div className="home-car-info">
-                    <span className="home-car-type">{car.type}</span>
-                    <h3>{car.name}</h3>
-                    <div className="home-car-footer">
-                      <p className="home-car-price">{car.price}<span>/day</span></p>
-                      <button className="home-book-btn">Rent Now</button>
-                    </div>
-                  </div>
-                </div>
-              )) : (
-                <p className="no-fleet-msg">No vehicles found in this category.</p>
-              )}
-            </div>
 
-            <button className="fleet-arrow next" onClick={() => scrollFleet('right')}>
-              <img src={rightArrow} alt="Next" />
-            </button>
+          <div className='vehicle-grid'>
+            {visibleVehicles.map(vehicle => (
+              <div key={vehicle.id} className='vehicle-card'>
+                <h3 className='vehicle-name'>{vehicle.name}</h3>
+                <p className='vehicle-price'>{vehicle.price}</p>
+                <div className='vehicle-img' style={{ backgroundImage: `url(${vehicle.image})` }}></div>
+                <div className='vehicle-footer'>
+                  <div className='vehicle-specs'>
+                    <span>{vehicle.seats} seats</span>
+                    <span>{vehicle.transmission}</span>
+                    <span>{vehicle.fuel}</span>
+                  </div>
+                  <button className='rent-btn'>
+                    Rent Now <span className='rent-icon'>↗</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className='vehicle-nav'>
+            <button
+              className='nav-arrow'
+              onClick={() => setVehiclePage(p => Math.max(0, p - 1))}
+              disabled={vehiclePage === 0}
+            >←</button>
+            <button
+              className='nav-arrow'
+              onClick={() => setVehiclePage(p => Math.min(totalPages - 1, p + 1))}
+              disabled={vehiclePage >= totalPages - 1}
+            >→</button>
           </div>
           
-          <div className="fleet-footer-link">
-            <Link to="/explore-fleet" className="view-all-fleet">View all vehicles</Link>
+          <div className="fleet-footer-link" style={{ marginTop: '30px' }}>
+            <Link to="/explore-fleet" className="view-all-fleet" style={{ color: 'white', borderColor: 'white' }}>View all vehicles</Link>
           </div>
         </div>
       </section>
-      <section className="premium-content">
-  <div className='premium-service'>
-    <h2 className='premium-text'>Explore Our Premium Vehicle Collection</h2>
-    <hr className='white-line'/>
-
-    <div className='vehicle-categories'>
-      {["all", "luxury", "suv", "economy", "pickup"].map(cat => (
-        <button
-          key={cat}
-          className={activeCategory === cat ? "active-btn" : ""}
-          onClick={() => { setActiveCategory(cat); setVehiclePage(0); }}
-        >
-          {cat === "all" ? "All" : cat === "suv" ? "SUVs" : cat.charAt(0).toUpperCase() + cat.slice(1)}
-        </button>
-      ))}
-    </div>
-
-    <div className='vehicle-grid'>
-      {visibleVehicles.map(vehicle => (
-        <div key={vehicle.id} className='vehicle-card'>
-          <h3 className='vehicle-name'>{vehicle.name}</h3>
-          <p className='vehicle-price'>{vehicle.price}</p>
-          <div className='vehicle-img' style={{ backgroundImage: `url(${vehicle.image})` }}></div>
-          <div className='vehicle-footer'>
-            <div className='vehicle-specs'>
-              <span>{vehicle.seats} seats</span>
-              <span>{vehicle.transmission}</span>
-              <span>{vehicle.fuel}</span>
-            </div>
-            <button className='rent-btn'>
-              Rent Now <span className='rent-icon'>↗</span>
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
-
-    <div className='vehicle-nav'>
-      <button
-        className='nav-arrow'
-        onClick={() => setVehiclePage(p => Math.max(0, p - 1))}
-        disabled={vehiclePage === 0}
-      >←</button>
-      <button
-        className='nav-arrow'
-        onClick={() => setVehiclePage(p => Math.min(totalPages - 1, p + 1))}
-        disabled={vehiclePage >= totalPages - 1}
-      >→</button>
-    </div>
-  </div>
-</section>
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-logo">
