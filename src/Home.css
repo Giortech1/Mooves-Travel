@@ -161,6 +161,22 @@
   flex-direction: column;
   gap: 15px;
 }
+.autocomplete-dropdown{
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  text-align: center ;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 200;
+  cursor: pointer;
+}
+
 
 .flight-options-top {
   display: flex;

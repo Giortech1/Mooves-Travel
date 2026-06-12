@@ -25,6 +25,7 @@ class AuthService {
         // Sauvegarder le token
         localStorage.setItem('authToken', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        console.log('Login réussi. Token stocké:', data.token);
         return data;
       } else {
         throw new Error(data.message);
@@ -53,6 +54,7 @@ class AuthService {
       if (data.success) {
         localStorage.setItem('authToken', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        console.log('Inscription réussie. Token stocké:', data.token);
         return data;
       } else {
         throw new Error(data.message);
@@ -82,6 +84,7 @@ class AuthService {
       if (data.success) {
         localStorage.setItem('authToken', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        console.log('Login Google réussi. Token stocké:', data.token);
         return data;
       } else {
         throw new Error(data.message);
@@ -113,6 +116,7 @@ class AuthService {
       if (data.success) {
         localStorage.setItem('authToken', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        console.log('Login Apple réussi. Token stocké:', data.token);
         return data;
       } else {
         throw new Error(data.message);
@@ -129,6 +133,7 @@ class AuthService {
   static async getCurrentUser() {
     try {
       const token = localStorage.getItem('authToken');
+      console.log('Récupération de l\'utilisateur : Token trouvé localement:', token);
 
       if (!token) {
         return null;
@@ -144,6 +149,7 @@ class AuthService {
       const data = await response.json();
 
       if (data.success) {
+        console.log('getCurrentUser: Informations utilisateur récupérées avec succès.');
         localStorage.setItem('user', JSON.stringify(data.user));
         return data.user;
       } else {
@@ -165,6 +171,7 @@ class AuthService {
       const token = localStorage.getItem('authToken');
 
       if (token) {
+        console.log('Tentative de déconnexion avec token:', token);
         await fetch(`${API_BASE_URL}/auth/logout`, {
           method: 'POST',
           headers: {
@@ -173,6 +180,7 @@ class AuthService {
         });
       }
 
+      console.log('Déconnexion réussie. Tokens supprimés.');
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
       return true;
@@ -195,7 +203,8 @@ class AuthService {
    * Récupérer le token
    */
   static getToken() {
-    return localStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken');
+    return token;
   }
 
   /**

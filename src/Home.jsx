@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 import Navbar from './Navbar';
+import { useAuth } from './hooks/useAuth.jsx';
 import logo from './assets/logo.png';
 import slide1 from './assets/img slide 1.png';
 import slide2 from './assets/img slide 2.png';
@@ -21,6 +22,7 @@ import img9 from './assets/img 9.png';
 // Fleet Assets
 
 import rightArrow from './assets/right arrow.png';
+const LOCATIONS = ["Douala Aéroport (DLA)", "Yaoundé Aéroport (NSI)", "Douala Akwa", "Yaoundé Centre-ville", "Bafoussam", "Kribi", "Limbe"];
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -32,6 +34,42 @@ const Home = () => {
   const [showTravelers, setShowTravelers] = useState(false);
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
+  const [flightResults, setFlightResults] = useState([]);
+  const [isSearchingFlights, setIsSearchingFlights] = useState(false);
+  const [flightSearch, setFlightSearch] = useState({
+    from: '',
+    to: '',
+    departureDate: '',
+    returnDate: ''
+  });
+
+  const { user } = useAuth();
+  const [carBooking, setCarBooking] = useState({
+    pickupLocation: '',
+    dropoffLocation: '',
+    pickupDate: '',
+    dropoffDate: '',
+    carType: 'All'
+  });
+  const [pickupSearch, setPickupSearch] = useState('');
+  const [dropoffSearch, setDropoffSearch] = useState('');
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'pickup' or 'dropoff'
+  
+  const pickupRef = useRef(null);
+  const dropoffRef = useRef(null);
+
+  // Fermer les dropdowns si on clique ailleurs
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (pickupRef.current && !pickupRef.current.contains(event.target) &&
+          dropoffRef.current && !dropoffRef.current.contains(event.target)) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const slides = [
     { image: "" },
     { image: "" },
@@ -140,6 +178,67 @@ const Home = () => {
   { id: 6, name: "Toyota Corolla",    price: "$90/day",  seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "economy"], image: slide1 },
 ];
 
+const handleCarBookingSubmit = async () => {
+  if (!user) {
+    alert("Veuillez vous connecter pour effectuer une réservation.");
+    return;
+  }
+  if (!carBooking.pickupLocation || !carBooking.dropoffLocation || !carBooking.pickupDate || !carBooking.dropoffDate) {
+    alert("Veuillez remplir tous les champs de location.");
+    return;
+  }
+
+  const token = localStorage.getItem('authToken');
+  console.log("Token envoyé pour la réservation:", token);
+
+  console.log("Tentative d'envoi de la réservation:", carBooking);
+
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/car-rental/book`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(carBooking)
+    });
+    const data = await response.json();
+    if (data.success) {
+      alert("Votre demande de location a été enregistrée ! L'admin vous contactera.");
+    } else {
+      alert("Erreur: " + data.message);
+    }
+  } catch (error) {
+    console.error("Booking error:", error);
+    alert("Une erreur est survenue lors de l'envoi de la demande.");
+  }
+};
+
+const handleFlightSearch = async () => {
+  if (!flightSearch.from || !flightSearch.to || !flightSearch.departureDate) {
+    alert("Veuillez remplir au moins le départ, l'arrivée et la date de départ.");
+    return;
+  }
+
+  setIsSearchingFlights(true);
+  try {
+    // Simulation ou appel API réel vers ton backend
+    const queryParams = new URLSearchParams({
+      from: flightSearch.from,
+      to: flightSearch.to,
+      date: flightSearch.departureDate,
+      class: flightClass
+    });
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/flights/search?${queryParams}`);
+    const data = await response.json();
+    setFlightResults(data.success ? data.flights : []);
+  } catch (error) {
+    console.error("Flight search error:", error);
+  } finally {
+    setIsSearchingFlights(false);
+  }
+};
+
 const filteredVehicles = vehicles.filter(v => v.category.includes(activeCategory));
 const totalPages = Math.ceil(filteredVehicles.length / 2);
 const visibleVehicles = filteredVehicles.slice(vehiclePage * 2, vehiclePage * 2 + 2);
@@ -220,40 +319,100 @@ const visibleVehicles = filteredVehicles.slice(vehiclePage * 2, vehiclePage * 2 
             <div className="search-fields-row">
               {activeService === 'car' ? (
                 <>
-                  <div className="search-item">
+                  <div className="search-item" style={{ position: 'relative' }} ref={pickupRef}>
                     <label>Pickup Location</label>
-                    <input type="text" placeholder="Where are you picking up?" />
+                    <input 
+                      type="text" 
+                      placeholder="Select city..." 
+                      value={pickupSearch}
+                      onChange={(e) => { setPickupSearch(e.target.value); setActiveDropdown('pickup'); }}
+                      onFocus={() => setActiveDropdown('pickup')}
+                    />
+                    {activeDropdown === 'pickup' && (
+                      <ul className="autocomplete-dropdown">
+                        {LOCATIONS.filter(l => l.toLowerCase().includes(pickupSearch.toLowerCase())).map(loc => (
+                          <li key={loc} onClick={() => {
+                            setCarBooking({...carBooking, pickupLocation: loc});
+                            setPickupSearch(loc);
+                            setActiveDropdown(null);
+                          }}>{loc}</li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                  <div className="search-item">
+                  <div className="search-item" style={{ position: 'relative' }} ref={dropoffRef}>
                     <label>Drop Location</label>
-                    <input type="text" placeholder="Where are you dropping off?" />
+                    <input 
+                      type="text" 
+                      placeholder="Select city..." 
+                      value={dropoffSearch}
+                      onChange={(e) => { setDropoffSearch(e.target.value); setActiveDropdown('dropoff'); }}
+                      onFocus={() => setActiveDropdown('dropoff')}
+                    />
+                    {activeDropdown === 'dropoff' && (
+                      <ul className="autocomplete-dropdown">
+                        {LOCATIONS.filter(l => l.toLowerCase().includes(dropoffSearch.toLowerCase())).map(loc => (
+                          <li key={loc} onClick={() => {
+                            setCarBooking({...carBooking, dropoffLocation: loc});
+                            setDropoffSearch(loc);
+                            setActiveDropdown(null);
+                          }}>{loc}</li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                   <div className="search-item">
                     <label>Pick-up Date</label>
-                    <input type="date" />
+                    <input 
+                      type="date" 
+                      value={carBooking.pickupDate}
+                      onChange={(e) => setCarBooking({...carBooking, pickupDate: e.target.value})}
+                    />
                   </div>
                   <div className="search-item">
                     <label>Drop Date</label>
-                    <input type="date" />
+                    <input 
+                      type="date" 
+                      value={carBooking.dropoffDate}
+                      onChange={(e) => setCarBooking({...carBooking, dropoffDate: e.target.value})}
+                    />
                   </div>
                 </>
               ) : (
                 <>
                   <div className="search-item">
                     <label>From</label>
-                    <input type="text" placeholder="Departure City" />
+                    <input 
+                      type="text" 
+                      placeholder="Departure City" 
+                      value={flightSearch.from}
+                      onChange={(e) => setFlightSearch({...flightSearch, from: e.target.value})}
+                    />
                   </div>
                   <div className="search-item">
                     <label>To</label>
-                    <input type="text" placeholder="Destination City" />
+                    <input 
+                      type="text" 
+                      placeholder="Destination City" 
+                      value={flightSearch.to}
+                      onChange={(e) => setFlightSearch({...flightSearch, to: e.target.value})}
+                    />
                   </div>
                   <div className="search-item">
                     <label>Departure</label>
-                    <input type="date" />
+                    <input 
+                      type="date" 
+                      value={flightSearch.departureDate}
+                      onChange={(e) => setFlightSearch({...flightSearch, departureDate: e.target.value})}
+                    />
                   </div>
                   <div className="search-item">
                     <label>Return</label>
-                    <input type="date" />
+                    <input 
+                      type="date" 
+                      value={flightSearch.returnDate}
+                      onChange={(e) => setFlightSearch({...flightSearch, returnDate: e.target.value})}
+                    />
                   </div>
                   <div className="search-item travelers-container">
                     <label>Travelers</label>
@@ -295,9 +454,36 @@ const visibleVehicles = filteredVehicles.slice(vehiclePage * 2, vehiclePage * 2 
               )}
             </div>
           </div>
-          <button className="btn-search">Search</button>
+          <button 
+            className="btn-search" 
+            onClick={activeService === 'car' ? handleCarBookingSubmit : handleFlightSearch}
+            disabled={isSearchingFlights}
+          >
+            {isSearchingFlights ? 'Searching...' : 'Search'}
+          </button>
         </div>
       </section>
+
+      {activeService === 'flight' && flightResults.length > 0 && (
+        <section className="flight-results-container" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
+          <h2 className='section-text'>Available Tickets</h2>
+          <div className="flight-results-grid">
+            {flightResults.map(flight => (
+              <div key={flight.id} className="flight-ticket-card" style={{ background: '#fff', padding: '20px', borderRadius: '10px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', marginBottom: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className="flight-info">
+                  <h4 style={{ color: '#0068BB', margin: '0' }}>{flight.airline}</h4>
+                  <p style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: '5px 0' }}>{flight.departureTime} ✈ {flight.arrivalTime}</p>
+                  <p style={{ color: '#666', margin: '0' }}>{flight.from} to {flight.to}</p>
+                </div>
+                <div className="flight-price-action" style={{ textAlign: 'right' }}>
+                  <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#2ecc71', margin: '0' }}>{flight.price} €</p>
+                  <button className="rent-btn" style={{ marginTop: '10px' }}>Select Ticket</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="featured">
         <div className="section-header">

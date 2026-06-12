@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
+import carRentalRoutes from './routes/carRentalRoutes.js';
+
 
 dotenv.config();
 
@@ -20,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/car-rental', carRentalRoutes);
 
 // Route de santé
 app.get('/health', (req, res) => {
@@ -37,6 +40,7 @@ app.use('*', (req, res) => {
     message: 'Route non trouvée',
   });
 });
+
 
 // Démarrer le serveur
 app.listen(PORT, () => {

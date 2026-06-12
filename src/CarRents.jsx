@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from './hooks/useAuth.jsx';
 import './CarRents.css';
 import logo from './assets/logo.png';
 
@@ -16,6 +17,7 @@ const CarRents = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
+  const { user, logout } = useAuth();
 
   const fleet = [
     { id: 1, name: "Mercedes-Benz AMG S 65", image: mercedes, price: "$200", type: "Luxury" },
@@ -65,14 +67,35 @@ const CarRents = () => {
           <li><a href="#about" onClick={() => setMenuOpen(false)}>about Us</a></li>
           <li><a href="#contact" onClick={() => setMenuOpen(false)}>contact</a></li>
           <li className="mobile-auth">
-            <Link to="/login" className="nav-login" onClick={() => setMenuOpen(false)}>Login</Link>
-            <Link to="/signup" className="nav-signup" onClick={() => setMenuOpen(false)}>Signup</Link>
+            {user ? (
+               <div className="user-profile-mobile">
+                  <span>{user.displayName || user.email}</span>
+                  <button onClick={logout}>Logout</button>
+               </div>
+            ) : (
+              <>
+                <Link to="/login" className="nav-login" onClick={() => setMenuOpen(false)}>Login</Link>
+                <Link to="/signup" className="nav-signup" onClick={() => setMenuOpen(false)}>Signup</Link>
+              </>
+            )}
           </li>
         </ul>
         
         <div className="nav-auth desktop-auth">
-          <Link to="/login" className="nav-login">Login</Link>
-          <Link to="/signup" className="nav-signup">Signup</Link>
+          {user ? (
+            <div className="user-profile-nav" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span className="user-name">{user.displayName || user.email}</span>
+              <div className="user-icon-placeholder" style={{ width: '35px', height: '35px', borderRadius: '50%', background: '#0068BB', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {user.displayName?.charAt(0) || user.email?.charAt(0)}
+              </div>
+              <button onClick={logout} className="nav-logout-btn">Logout</button>
+            </div>
+          ) : (
+            <>
+              <Link to="/login" className="nav-login">Login</Link>
+              <Link to="/signup" className="nav-signup">Signup</Link>
+            </>
+          )}
         </div>
       </nav>
 
