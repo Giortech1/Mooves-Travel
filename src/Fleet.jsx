@@ -268,6 +268,6 @@ function Fleet() {
       
           
         );
-      };
+      }
 
 export default Fleet;

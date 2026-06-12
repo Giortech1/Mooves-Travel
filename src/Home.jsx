@@ -8,6 +8,8 @@ import slide2 from './assets/img slide 2.png';
 import slide3 from './assets/img slide 3.png';
 import slide4 from './assets/img slide 4.png';
 import slide5 from './assets/img slide 5.png';
+import leftArrow from './assets/left arrow.png';
+import rightArrow from './assets/right arrow.png';
 import img1 from './assets/Img 1.png';
 import img2 from './assets/img 2.jfif';
 import img3 from './assets/img 3.png';
@@ -19,36 +21,57 @@ import img8 from './assets/img 8.png';
 import img9 from './assets/img 9.png';
 
 // Fleet Assets
-
-import rightArrow from './assets/right arrow.png';
+import mercedes from './assets/2020_Mercedes-Benz_AMG_S_65-removebg-preview.png';
+import urus from './assets/ABT_Lamborghini_Urus_Scatenato_2024-removebg-preview.png';
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [vehiclePage, setVehiclePage] = useState(0);
-  const [activeService, setActiveService] = useState('car');
-  const [showClassDropdown, setShowClassDropdown] = useState(false);
-  const [flightClass, setFlightClass] = useState('Economy');
-  const [showTravelers, setShowTravelers] = useState(false);
+  const [activeService, setActiveService] = useState('car'); // 'car' or 'flight'
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
+  const [showTravelers, setShowTravelers] = useState(false);
+  const [flightClass, setFlightClass] = useState('Economy');
+  const [showClassDropdown, setShowClassDropdown] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [vehiclePage, setVehiclePage] = useState(0);
+
   const slides = [
-    { image: "" },
-    { image: "" },
-    { image: "" },
-    { image: "" },
-    { image: "" }
-  ];
-
-  const fleetRef = useRef(null);
-
-  const scrollFleet = (direction) => {
-    if (fleetRef.current) {
-      const { scrollLeft, clientWidth } = fleetRef.current;
-      const scrollTo = direction === 'left' ? scrollLeft - clientWidth / 2 : scrollLeft + clientWidth / 2;
-      fleetRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
+    { 
+      image: slide1,
+      title: "Premium Mobility Solutions",
+      subtitle: "Experience comfort, reliability, and exceptional service on every journey.",
+      cta: "Explore Fleet",
+      link: "#fleet"
+    },
+    { 
+      image: slide2,
+      title: "Luxury Travel Redefined",
+      subtitle: "Travel in style with our high-end executive vehicle collection.",
+      cta: "Book Now",
+      link: "/login"
+    },
+    { 
+      image: slide3,
+      title: "Global Flight Booking",
+      subtitle: "Reach your destination with our seamless and affordable flight services.",
+      cta: "Check Flights",
+      link: "#"
+    },
+    { 
+      image: slide4,
+      title: "Corporate Fleet Management",
+      subtitle: "Optimized mobility solutions tailored for your business needs.",
+      cta: "Contact Us",
+      link: "/contact"
+    },
+    { 
+      image: slide5,
+      title: "Airport Transfer Services",
+      subtitle: "Punctual and comfortable pickups for a stress-free travel experience.",
+      cta: "Schedule Pickup",
+      link: "#"
     }
-  };
+  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -132,12 +155,12 @@ const Home = () => {
   ];
 
   const vehicles = [
-  { id: 1, name: "Cadillac Escalade", price: "$450/day", seats: 7, transmission: "Automatic", fuel: "Gasoline", category: ["all", "suv"],     image: slide1 },
-  { id: 2, name: "Lamborghini Urus",  price: "$500/day", seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "luxury"],  image: slide2 },
-  { id: 3, name: "Mercedes S-Class",  price: "$380/day", seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "luxury"],  image: slide3 },
-  { id: 4, name: "Range Rover Sport", price: "$420/day", seats: 7, transmission: "Automatic", fuel: "Diesel",   category: ["all", "suv"],     image: slide4 },
-  { id: 5, name: "Toyota Hilux",      price: "$180/day", seats: 5, transmission: "Manual",    fuel: "Diesel",   category: ["all", "pickup"],  image: slide5 },
-  { id: 6, name: "Toyota Corolla",    price: "$90/day",  seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "economy"], image: slide1 },
+  { id: 1, name: "Mercedes-Benz AMG S 65", price: "$200/day", seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "luxury"], image: mercedes },
+  { id: 2, name: "Lamborghini Urus",      price: "$500/day", seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "luxury"], image: urus },
+  { id: 3, name: "Cadillac Escalade",    price: "$450/day", seats: 7, transmission: "Automatic", fuel: "Gasoline", category: ["all", "suv"],    image: slide1 },
+  { id: 4, name: "Range Rover Sport",    price: "$420/day", seats: 7, transmission: "Automatic", fuel: "Diesel",   category: ["all", "suv"],    image: slide4 },
+  { id: 5, name: "Toyota Hilux",         price: "$180/day", seats: 5, transmission: "Manual",    fuel: "Diesel",   category: ["all", "pickup"], image: slide5 },
+  { id: 6, name: "Toyota Corolla",       price: "$90/day",  seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "economy"], image: slide1 },
 ];
 
 const filteredVehicles = vehicles.filter(v => v.category.includes(activeCategory));
@@ -153,11 +176,30 @@ const visibleVehicles = filteredVehicles.slice(vehiclePage * 2, vehiclePage * 2 
           <button className="slider-btn prev" onClick={prevSlide}>&#10094;</button>
           <button className="slider-btn next" onClick={nextSlide}>&#10095;</button>
           
-          {slides.map((_, index) => (
+          {slides.map((slide, index) => (
             <div
               key={index}
               className={`slide ${index === currentSlide ? 'active' : ''}`}
             >
+              <div 
+                className="slide-image" 
+                style={{ 
+                  backgroundImage: slide.image ? `url("${slide.image}")` : 'none'
+                }}
+              ></div>
+              <div className="slide-overlay"></div>
+              
+              {slide.title && (
+                <div className="slide-content">
+                  <h1>{slide.title}</h1>
+                  <p>{slide.subtitle}</p>
+                  {slide.cta && (
+                    <a href={slide.link} className="slide-cta">
+                      {slide.cta}
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
           ))}
 
@@ -304,8 +346,8 @@ const visibleVehicles = filteredVehicles.slice(vehiclePage * 2, vehiclePage * 2 
           <h2 className="section-text">OUR SERVICES</h2>
           <p>With years of experience and a dedicated team, we provide <br /><strong className='s-strong'>Premium mobility</strong> solutions designed for <strong className='s-strong'>comfort, reliability, and exceptional service.</strong></p>
         </div>
-          <div className="destinations-grid">
-          {services.slice(0, 4).map((service) => (
+        <div className="destinations-grid">
+          {services.map((service) => (
             <div key={service.id} className="dest-card">
               <div className="dest-image" style={{ backgroundImage: `url(${service.image})` }}></div>
               <div className="dest-info">
@@ -317,136 +359,61 @@ const visibleVehicles = filteredVehicles.slice(vehiclePage * 2, vehiclePage * 2 
         </div>
       </section>
 
-      <section className="home-fleet-section">
-        <div className="fleet-container-inner" ref={fleetRef}>
-          <div className="fleet-header-right">
-            <h2>Explore Our Premium Vehicle Collection</h2>
-            <div className="fleet-divider"></div>
-          </div>
-          <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide2})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Flight Ticketing</h3>
-              <p>Book local and international flights with ease and enjoy a smooth travel experience supported by fast reservations and trusted service.</p>
-            </div>
-          </div>
-          <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Driver Services</h3>
-              <p>Travel in comfort with professional drivers dedicated to providing safe, punctual, and premium transportation experiences.</p>
-            </div>
-          </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Corporate Vehicle Leasing</h3>
-              <p>Empower your business with flexible vehicle leasing solutions tailored to support company operations, executive travel, and staff mobility.</p>
-            </div>
-          </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>AirPort Transfer Service</h3>
-              <p>Enjoy stress-free pickups and drop-offs with dependable airport transportation designed for comfort, convenience, and punctuality.</p>
-            </div>
-          </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Utility & Pickup Vehicle</h3>
-              <p>Get the power and durability you need with utility and pickup vehicles built to handle business operations, logistics, and demanding tasks.</p>
-            </div>
-          </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Fleet Management Services</h3>
-              <p>Optimize your business transportation with professional fleet management solutions focused on efficiency, reliability, and operational control.</p>
-            </div>
-          </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Tokyo, Japan</h3>
-              <p>Where tradition meets technology.</p>
-            </div>
+      <section className="premium-content" id="fleet">
+        <div className='premium-service'>
+          <h2 className='premium-text'>Explore Our Premium Vehicle Collection</h2>
+          <hr className='white-line'/>
 
-            <button className="fleet-arrow next" onClick={() => scrollFleet('right')}>
-              <img src={rightArrow} alt="Next" />
-            </button>
+          <div className='vehicle-categories'>
+            {["all", "luxury", "suv", "economy", "pickup"].map(cat => (
+              <button
+                key={cat}
+                className={activeCategory === cat ? "active-btn" : ""}
+                onClick={() => { setActiveCategory(cat); setVehiclePage(0); }}
+              >
+                {cat === "all" ? "All" : cat === "suv" ? "SUVs" : cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          <div className='vehicle-grid'>
+            {visibleVehicles.map(vehicle => (
+              <div key={vehicle.id} className='vehicle-card'>
+                <h3 className='vehicle-name'>{vehicle.name}</h3>
+                <p className='vehicle-price'>{vehicle.price}</p>
+                <div className='vehicle-img' style={{ backgroundImage: `url(${vehicle.image})` }}></div>
+                <div className='vehicle-footer'>
+                  <div className='vehicle-specs'>
+                    <span>{vehicle.seats} seats</span>
+                    <span>{vehicle.transmission}</span>
+                    <span>{vehicle.fuel}</span>
+                  </div>
+                  <button className='rent-btn'>
+                    Rent Now <span className='rent-icon'>↗</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className='vehicle-nav'>
+            <button
+              className='nav-arrow'
+              onClick={() => setVehiclePage(p => Math.max(0, p - 1))}
+              disabled={vehiclePage === 0}
+            >←</button>
+            <button
+              className='nav-arrow'
+              onClick={() => setVehiclePage(p => Math.min(totalPages - 1, p + 1))}
+              disabled={vehiclePage >= totalPages - 1}
+            >→</button>
           </div>
           
-          <div className="fleet-footer-link">
-            <Link to="/explore-fleet" className="view-all-fleet">View all vehicles</Link>
-          </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Executive/ Luxury Transportation</h3>
-              <p>Experience premium mobility with luxury vehicles and first-class services designed for executives, VIP clients, and special occasions.</p>
-            </div>
-          </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Business Mobility Solutions</h3>
-              <p>Simplify corporate transportation through smart mobility services designed to improve productivity, flexibility, and business performance.</p>
-            </div>
+          <div className="fleet-footer-link" style={{ marginTop: '30px' }}>
+            <Link to="/explore-fleet" className="view-all-fleet" style={{ color: 'white', borderColor: 'white' }}>View all vehicles</Link>
           </div>
         </div>
       </section>
-      <section className="premium-content">
-  <div className='premium-service'>
-    <h2 className='premium-text'>Explore Our Premium Vehicle Collection</h2>
-    <hr className='white-line'/>
-
-    <div className='vehicle-categories'>
-      {["all", "luxury", "suv", "economy", "pickup"].map(cat => (
-        <button
-          key={cat}
-          className={activeCategory === cat ? "active-btn" : ""}
-          onClick={() => { setActiveCategory(cat); setVehiclePage(0); }}
-        >
-          {cat === "all" ? "All" : cat === "suv" ? "SUVs" : cat.charAt(0).toUpperCase() + cat.slice(1)}
-        </button>
-      ))}
-    </div>
-
-    <div className='vehicle-grid'>
-      {visibleVehicles.map(vehicle => (
-        <div key={vehicle.id} className='vehicle-card'>
-          <h3 className='vehicle-name'>{vehicle.name}</h3>
-          <p className='vehicle-price'>{vehicle.price}</p>
-          <div className='vehicle-img' style={{ backgroundImage: `url(${vehicle.image})` }}></div>
-          <div className='vehicle-footer'>
-            <div className='vehicle-specs'>
-              <span>{vehicle.seats} seats</span>
-              <span>{vehicle.transmission}</span>
-              <span>{vehicle.fuel}</span>
-            </div>
-            <button className='rent-btn'>
-              Rent Now <span className='rent-icon'>↗</span>
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
-
-    <div className='vehicle-nav'>
-      <button
-        className='nav-arrow'
-        onClick={() => setVehiclePage(p => Math.max(0, p - 1))}
-        disabled={vehiclePage === 0}
-      >←</button>
-      <button
-        className='nav-arrow'
-        onClick={() => setVehiclePage(p => Math.min(totalPages - 1, p + 1))}
-        disabled={vehiclePage >= totalPages - 1}
-      >→</button>
-    </div>
-  </div>
-</section>
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-logo">

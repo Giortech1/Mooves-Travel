@@ -1,6 +1,6 @@
 import "./FlightBooking.css";
 import Navbar from "./Navbar";
-import { FaPlaneDeparture, FaPlaneArrival, FaInstagram, FaFacebookF, FaTwitter, FaYoutube } from "react-icons/fa";
+import { FaInstagram, FaFacebookF, FaTwitter, FaYoutube } from "react-icons/fa";
 import planeBg from "./assets/img slide 2.png";
 import logo from "./assets/logo.png";
 import appStore from "./assets/foot1.png";
