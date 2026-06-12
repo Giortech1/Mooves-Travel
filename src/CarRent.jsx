@@ -1,5 +1,5 @@
 
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // Link not used in this component
 import './CarRent.css';
 import Navbar from './Navbar';
@@ -145,28 +145,38 @@ const filterTabs = [
 
 // ── Component ───────────────────────────────────────────────────────
 const CarRent = () => {
+  const [activeTab, setActiveTab] = useState('All vehicles');
   const gridRef = useRef(null);
+
+  const filteredCars = cars.filter(car => {
+    if (activeTab === 'All vehicles') return true;
+    // Map tab labels to car types if they differ (e.g., 'Suv' vs 'SUV')
+    const typeMap = {
+      'Suv': 'SUV',
+      'Minivan': 'Minivan',
+      'Sedan': 'Sedan',
+      'Pickup': 'Pickup',
+      'Economy': 'Economy',
+      'Cabriolet': 'Cabriolet'
+    };
+    const targetType = typeMap[activeTab] || activeTab;
+    return car.type === targetType;
+  });
 
   useEffect(() => {
     const el = gridRef.current;
     if (!el) return;
 
-    const obs = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            el.classList.add('animate');
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
+    // Reset animation class when tab changes to re-trigger staggered reveal
+    el.classList.remove('animate');
+    // Small timeout to ensure the DOM has updated with filtered items
+    const timer = setTimeout(() => {
+      el.classList.add('animate');
+    }, 50);
 
-    obs.observe(el);
+    return () => clearTimeout(timer);
+  }, [activeTab]);
 
-    return () => obs.disconnect();
-  }, []);
   return (
     <div className="car-rent-container">
       <div>
@@ -245,10 +255,11 @@ const CarRent = () => {
 
         {/* Filter Tabs */}
         <div className="filter-tabs">
-          {filterTabs.map((tab, i) => (
+          {filterTabs.map((tab) => (
             <button
               key={tab.label}
-              className={`filter-tab ${i === 0 ? 'active' : ''}`}
+              className={`filter-tab ${activeTab === tab.label ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.label)}
             >
               {tab.icon && tab.icon}
               {tab.label}
@@ -258,30 +269,36 @@ const CarRent = () => {
 
         {/* Car Grid */}
         <div className="car-grid" ref={gridRef}>
-          {cars.map(car => (
-            <div key={car.id} className="car-card">
-              <img src={car.image} alt={car.name} />
+          {filteredCars.length > 0 ? (
+            filteredCars.map(car => (
+              <div key={car.id} className="car-card">
+                <img src={car.image} alt={car.name} />
 
-              <div className="car-info">
-                <div>
-                  <div className="car-name">{car.name}</div>
-                  <div className="car-type">{car.type}</div>
+                <div className="car-info">
+                  <div>
+                    <div className="car-name">{car.name}</div>
+                    <div className="car-type">{car.type}</div>
+                  </div>
+                  <div className="car-price">
+                    <span className="price">${car.price}</span>
+                    <span className="per-day">per day</span>
+                  </div>
                 </div>
-                <div className="car-price">
-                  <span className="price">${car.price}</span>
-                  <span className="per-day">per day</span>
+
+                <div className="car-features">
+                  <span className="car-feature"><GearIcon /> Automat</span>
+                  <span className="car-feature"><FuelIcon /> PB 95</span>
+                  <span className="car-feature"><AcIcon /> Air Conditioner</span>
                 </div>
-              </div>
 
-              <div className="car-features">
-                <span className="car-feature"><GearIcon /> Automat</span>
-                <span className="car-feature"><FuelIcon /> PB 95</span>
-                <span className="car-feature"><AcIcon /> Air Conditioner</span>
+                <button className="view-details-btn">View Details</button>
               </div>
-
-              <button className="view-details-btn">View Details</button>
+            ))
+          ) : (
+            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px 0' }}>
+              <h3 style={{ color: '#6b7280', fontWeight: 500 }}>No vehicles found in this category.</h3>
             </div>
-          ))}
+          )}
         </div>
       </section>
 
