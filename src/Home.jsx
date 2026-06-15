@@ -1,6 +1,8 @@
-import "./Home.css";
-import Navbar from "./Navbar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from 'react';
+import './Home.css';
+import Navbar from './Navbar';
+import { useAuth } from './hooks/useAuth.jsx';
+import logo from './assets/logo.png';
 import {
   FaFacebookF, FaInstagram, FaTwitter, FaYoutube,
   FaMapMarkerAlt, FaEnvelope, FaPhoneAlt,
@@ -14,7 +16,6 @@ import lamborghini from "./assets/ABT_Lamborghini_Urus_Scatenato_2024-removebg-p
 import client1 from "./assets/Avatar6.png";
 import client2 from "./assets/ayesha.png";
 import client3 from "./assets/mehak.png";
-import logo from "./assets/logo.png";
 import appStore from "./assets/foot1.png";
 import googlePlay from "./assets/foot2.png";
 import car from "./assets/corola toyota.png";
@@ -26,7 +27,8 @@ import pickup from "./assets/Img 1.png";
 import fleet from "./assets/Creative_Poster_Design-removebg-preview.png";
 import luxury from "./assets/luxury.jpg";
 import fleet1 from "./assets/fleet.jpg";
-const slides = [
+
+const heroSlides = [
   {
     img: heroSlide1,
     title: "Drive Anywhere Across Cameroon & Beyond",
@@ -92,36 +94,38 @@ const services = [
   },
 ];
 
+const LOCATIONS = ["Douala Aéroport (DLA)", "Yaoundé Aéroport (NSI)", "Douala Akwa", "Yaoundé Centre-ville", "Bafoussam", "Kribi", "Limbe"];
+
 const whyChoose = [
   {
     color: "#fde0e8",
     title: "Zero Deposit Required",
-    text: "We know how vital cash flow is for growing businesses. Unlike traditional corporate leasing companies that require hefty upfront deposits, you can get started with a clean, lean and minimal entry fee. You can get your fleet on the road operationally ready, keeping your money right where it belongs - in your business.",
+    text: "We know how vital cash flow is for growing businesses. Unlike traditional corporate leasing companies that require hefty upfront deposits, you can get started with a clean, lean and minimal entry fee.",
   },
   {
     color: "#dbe9ff",
     title: "Maintenance and Servicing are on Us",
-    text: "Managing a fleet means dealing with unpredictable breakdowns, scheduling of garages, and being valuable time at the mechanic. With Mooves, we use completely forget about that burden. We handle all routine maintenance and scheduled servicing for you. If a car needs work, we take care of it, so you never have to worry about downtime.",
+    text: "Managing a fleet means dealing with unpredictable breakdowns. With Mooves, we handle all routine maintenance and scheduled servicing for you.",
   },
   {
     color: "#d6f5ec",
     title: "Full Commercial Insurance Included",
-    text: "Mooves operate up-front, fleet rates with comprehensive commercial insurance coverage. We've got you covered against unexpected, going-on and your drivers consistent peace of mind on every trip, with zero added insurance stress for your team to manage.",
+    text: "Mooves operate with comprehensive commercial insurance coverage. We've got you covered against unexpected events with zero added insurance stress.",
   },
   {
     color: "#fdf0d6",
     title: "Flexi-Car Scaling",
-    text: "Markets change quickly, and your fleet should be able to keep up with it. Our Flexi-Cut works lets you add or remove vehicles whenever your business needs change, giving you full control to scale up your fleet exactly when it's needed, or scale down without long-term contracts holding you back.",
+    text: "Markets change quickly, and your fleet should keep up. Add or remove vehicles whenever your business needs change.",
   },
   {
     color: "#fde0e8",
     title: "High-Efficiency & Electric Options",
-    text: "Whether you're trying to cut down on your operating fuel expenses or meet modern corporate sustainability standards, we have the fleet to match. Choose hybrid, fuel-efficient, or all-electric vehicles tailored to your needs, and help your team move with assurance while also reducing your overall operational carbon footprint.",
+    text: "Choose hybrid, fuel-efficient, or all-electric vehicles tailored to your needs while reducing operational carbon footprint.",
   },
   {
     color: "#e6f4d9",
     title: "A Clear Path to Asset Equity",
-    text: "If you are looking for long-term growth, don't rent the Clean Drive-to-Own programs are an absolute game-changer. Instead of watching your monthly budget disappear, your payments can go toward eventual ownership when you decide it's time for your business to formally own its fleet vehicles.",
+    text: "Our Drive-to-Own programs let your payments go toward eventual ownership when you decide it's time for your business to own its fleet.",
   },
 ];
 
@@ -130,25 +134,23 @@ const testimonials = [
     img: client1,
     name: "Michael Tchoumi",
     role: "Business Traveler",
-    text: "Mooves has turned out how we manage transportation for our team. Their fleet is always in excellent condition, and the booking process is simple and efficient. A dependable partner for any business.",
+    text: "Mooves has transformed how we manage transportation for our team. Their fleet is always in excellent condition.",
   },
   {
     img: client2,
     name: "Giorno Roman",
     role: "CEO, Bizlocate",
-    text: "I rented an SUV for a week-long trip and was impressed by the vehicle quality and customer service. Everything went smoothly from booking to return, I would gladly choose Mooves again.",
+    text: "I rented an SUV for a week-long trip and was impressed by the vehicle quality and customer service.",
   },
   {
     img: client3,
     name: "Sarah Nfor",
     role: "Entrepreneur",
-    text: "Booking my flight and airport transfer through Mooves was effortless. From pickup to drop-off, the process was seamless and the support team was responsive throughout my journey.",
+    text: "Booking my flight and airport transfer through Mooves was effortless. The support team was responsive throughout my journey.",
   },
 ];
 
 function Home() {
-  const [activeTab, setActiveTab] = useState("Car Rent");
-  const [activeFilter, setActiveFilter] = useState("All");
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activeService, setActiveService] = useState('car');
   const [showClassDropdown, setShowClassDropdown] = useState(false);
@@ -156,27 +158,131 @@ function Home() {
   const [showTravelers, setShowTravelers] = useState(false);
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
+  const [flightResults, setFlightResults] = useState([]);
+  const [isSearchingFlights, setIsSearchingFlights] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("All");
+  
+  const { user } = useAuth();
+  
+  const [flightSearch, setFlightSearch] = useState({
+    from: '',
+    to: '',
+    departureDate: '',
+    returnDate: ''
+  });
+
+  const [carBooking, setCarBooking] = useState({
+    pickupLocation: '',
+    dropoffLocation: '',
+    pickupDate: '',
+    dropoffDate: '',
+    carType: 'All'
+  });
+
+  const [pickupSearch, setPickupSearch] = useState('');
+  const [dropoffSearch, setDropoffSearch] = useState('');
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  
+  const pickupRef = useRef(null);
+  const dropoffRef = useRef(null);
+
+  // Fermer les dropdowns si on clique ailleurs
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (pickupRef.current && !pickupRef.current.contains(event.target) &&
+          dropoffRef.current && !dropoffRef.current.contains(event.target)) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Auto-rotate carousel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide(prev => (prev === heroSlides.length - 1 ? 0 : prev + 1));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleCarBookingSubmit = async () => {
+    if (!user) {
+      alert("Veuillez vous connecter pour effectuer une réservation.");
+      return;
+    }
+    if (!carBooking.pickupLocation || !carBooking.dropoffLocation || !carBooking.pickupDate || !carBooking.dropoffDate) {
+      alert("Veuillez remplir tous les champs de location.");
+      return;
+    }
+
+    const token = localStorage.getItem('authToken');
+    console.log("Token envoyé pour la réservation:", token);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/car-rental/book`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(carBooking)
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert("Votre demande de location a été enregistrée ! L'admin vous contactera.");
+        // Réinitialiser le formulaire
+        setCarBooking({
+          pickupLocation: '',
+          dropoffLocation: '',
+          pickupDate: '',
+          dropoffDate: '',
+          carType: 'All'
+        });
+      } else {
+        alert("Erreur: " + data.message);
+      }
+    } catch (error) {
+      console.error("Booking error:", error);
+      alert("Une erreur est survenue lors de l'envoi de la demande.");
+    }
+  };
+
+  const handleFlightSearch = async () => {
+    if (!flightSearch.from || !flightSearch.to || !flightSearch.departureDate) {
+      alert("Veuillez remplir au moins le départ, l'arrivée et la date de départ.");
+      return;
+    }
+
+    setIsSearchingFlights(true);
+    try {
+      const queryParams = new URLSearchParams({
+        from: flightSearch.from,
+        to: flightSearch.to,
+        date: flightSearch.departureDate,
+        class: flightClass
+      });
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/flights/search?${queryParams}`);
+      const data = await response.json();
+      setFlightResults(data.success ? data.flights : []);
+    } catch (error) {
+      console.error("Flight search error:", error);
+    } finally {
+      setIsSearchingFlights(false);
+    }
+  };
 
   const goToSlide = (index) => {
     setCurrentSlide(index);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    setCurrentSlide((prev) => (prev === 0 ? heroSlides.length - 1 : prev - 1));
   };
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    setCurrentSlide((prev) => (prev === heroSlides.length - 1 ? 0 : prev + 1));
   };
-
-  // Auto-rotate every 5 seconds (use functional update to avoid re-creating interval)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide(prev => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="home-page">
@@ -184,13 +290,12 @@ function Home() {
 
       {/* HERO SLIDER */}
       <section className="hero-slider">
-        {slides.map((slide, index) => (
+        {heroSlides.map((slide, index) => (
           <div
             key={index}
             className={`hero-slide ${index === currentSlide ? "active" : ""}`}
           >
             <img src={slide.img} alt={slide.title} className="hero-img" />
-
             <div className="hero-overlay">
               <h1>{slide.title}</h1>
               <p>{slide.text}</p>
@@ -207,7 +312,7 @@ function Home() {
         </button>
 
         <div className="slider-dots">
-          {slides.map((_, index) => (
+          {heroSlides.map((_, index) => (
             <span
               key={index}
               className={`dot ${index === currentSlide ? "active" : ""}`}
@@ -217,7 +322,8 @@ function Home() {
         </div>
       </section>
 
-     <section className="search-section">
+      {/* SEARCH SECTION */}
+      <section className="search-section">
         <div className="service-tabs">
           <button 
             className={`tab-btn ${activeService === 'car' ? 'active' : ''}`}
@@ -264,40 +370,100 @@ function Home() {
             <div className="search-fields-row">
               {activeService === 'car' ? (
                 <>
-                  <div className="search-item">
+                  <div className="search-item" style={{ position: 'relative' }} ref={pickupRef}>
                     <label>Pickup Location</label>
-                    <input type="text" placeholder="Where are you picking up?" />
+                    <input 
+                      type="text" 
+                      placeholder="Select city..." 
+                      value={pickupSearch}
+                      onChange={(e) => { setPickupSearch(e.target.value); setActiveDropdown('pickup'); }}
+                      onFocus={() => setActiveDropdown('pickup')}
+                    />
+                    {activeDropdown === 'pickup' && (
+                      <ul className="autocomplete-dropdown">
+                        {LOCATIONS.filter(l => l.toLowerCase().includes(pickupSearch.toLowerCase())).map(loc => (
+                          <li key={loc} onClick={() => {
+                            setCarBooking({...carBooking, pickupLocation: loc});
+                            setPickupSearch(loc);
+                            setActiveDropdown(null);
+                          }}>{loc}</li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                  <div className="search-item">
+                  <div className="search-item" style={{ position: 'relative' }} ref={dropoffRef}>
                     <label>Drop Location</label>
-                    <input type="text" placeholder="Where are you dropping off?" />
+                    <input 
+                      type="text" 
+                      placeholder="Select city..." 
+                      value={dropoffSearch}
+                      onChange={(e) => { setDropoffSearch(e.target.value); setActiveDropdown('dropoff'); }}
+                      onFocus={() => setActiveDropdown('dropoff')}
+                    />
+                    {activeDropdown === 'dropoff' && (
+                      <ul className="autocomplete-dropdown">
+                        {LOCATIONS.filter(l => l.toLowerCase().includes(dropoffSearch.toLowerCase())).map(loc => (
+                          <li key={loc} onClick={() => {
+                            setCarBooking({...carBooking, dropoffLocation: loc});
+                            setDropoffSearch(loc);
+                            setActiveDropdown(null);
+                          }}>{loc}</li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                   <div className="search-item">
                     <label>Pick-up Date</label>
-                    <input type="date" />
+                    <input 
+                      type="date" 
+                      value={carBooking.pickupDate}
+                      onChange={(e) => setCarBooking({...carBooking, pickupDate: e.target.value})}
+                    />
                   </div>
                   <div className="search-item">
                     <label>Drop Date</label>
-                    <input type="date" />
+                    <input 
+                      type="date" 
+                      value={carBooking.dropoffDate}
+                      onChange={(e) => setCarBooking({...carBooking, dropoffDate: e.target.value})}
+                    />
                   </div>
                 </>
               ) : (
                 <>
                   <div className="search-item">
                     <label>From</label>
-                    <input type="text" placeholder="Departure City" />
+                    <input 
+                      type="text" 
+                      placeholder="Departure City" 
+                      value={flightSearch.from}
+                      onChange={(e) => setFlightSearch({...flightSearch, from: e.target.value})}
+                    />
                   </div>
                   <div className="search-item">
                     <label>To</label>
-                    <input type="text" placeholder="Destination City" />
+                    <input 
+                      type="text" 
+                      placeholder="Destination City" 
+                      value={flightSearch.to}
+                      onChange={(e) => setFlightSearch({...flightSearch, to: e.target.value})}
+                    />
                   </div>
                   <div className="search-item">
                     <label>Departure</label>
-                    <input type="date" />
+                    <input 
+                      type="date" 
+                      value={flightSearch.departureDate}
+                      onChange={(e) => setFlightSearch({...flightSearch, departureDate: e.target.value})}
+                    />
                   </div>
                   <div className="search-item">
                     <label>Return</label>
-                    <input type="date" />
+                    <input 
+                      type="date" 
+                      value={flightSearch.returnDate}
+                      onChange={(e) => setFlightSearch({...flightSearch, returnDate: e.target.value})}
+                    />
                   </div>
                   <div className="search-item travelers-container">
                     <label>Travelers</label>
@@ -339,17 +505,41 @@ function Home() {
               )}
             </div>
           </div>
-          <button className="btn-search">Search</button>
+          <button 
+            className="btn-search" 
+            onClick={activeService === 'car' ? handleCarBookingSubmit : handleFlightSearch}
+            disabled={isSearchingFlights}
+          >
+            {isSearchingFlights ? 'Searching...' : 'Search'}
+          </button>
         </div>
       </section>
 
-
+      {/* FLIGHT RESULTS */}
+      {activeService === 'flight' && flightResults.length > 0 && (
+        <section className="flight-results-container" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
+          <h2 className='section-text'>Available Tickets</h2>
+          <div className="flight-results-grid">
+            {flightResults.map(flight => (
+              <div key={flight.id} className="flight-ticket-card" style={{ background: '#fff', padding: '20px', borderRadius: '10px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', marginBottom: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className="flight-info">
+                  <h4 style={{ color: '#0068BB', margin: '0' }}>{flight.airline}</h4>
+                  <p style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: '5px 0' }}>{flight.departureTime} ✈ {flight.arrivalTime}</p>
+                  <p style={{ color: '#666', margin: '0' }}>{flight.from} to {flight.to}</p>
+                </div>
+                <div className="flight-price-action" style={{ textAlign: 'right' }}>
+                  <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#2ecc71', margin: '0' }}>{flight.price} €</p>
+                  <button className="rent-btn" style={{ marginTop: '10px' }}>Select Ticket</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* SERVICES */}
       <section className="services-section">
-        <h2>
-          Our <span>Services</span>
-        </h2>
+        <h2>Our <span>Services</span></h2>
         <p className="services-subtitle">
           With years of experience and a dedicated team, we provide{' '}
           <span className="highlight">Premium mobility</span> solutions
@@ -357,19 +547,17 @@ function Home() {
         </p>
 
         <div className="services-grid">
-  {services.map((s, i) => (
-    <div className="service-card" key={i}>
-      <img src={s.img} alt={s.title} className="service-img" />
-      <div className="service-content">
-        <h3>{s.title}</h3>
-        <p>{s.text}</p>
-        <a href="#" className="view-all">
-          View All
-        </a>
-      </div>
-    </div>
-  ))}
-</div>
+          {services.map((s, i) => (
+            <div className="service-card" key={i}>
+              <img src={s.img} alt={s.title} className="service-img" />
+              <div className="service-content">
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+                <a href="#" className="view-all">View All</a>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* VEHICLE COLLECTION */}
@@ -435,10 +623,7 @@ function Home() {
         <div className="why-grid">
           {whyChoose.map((item, i) => (
             <div className="why-card" key={i}>
-              <div
-                className="why-icon"
-                style={{ background: item.color }}
-              ></div>
+              <div className="why-icon" style={{ background: item.color }}></div>
               <h4>{item.title}</h4>
               <p>{item.text}</p>
             </div>

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 // Link not used in this component
 import './CarRent.css';
 import Navbar from './Navbar';
+import { useAuth } from './hooks/useAuth.jsx';
 import img1 from './assets/corola toyota.png';
 import img2 from './assets/car1.png';
 import img3 from './assets/2020_Mercedes-Benz_AMG_S_65-removebg-preview.png';
@@ -146,21 +147,59 @@ const filterTabs = [
 // ── Component ───────────────────────────────────────────────────────
 const CarRent = () => {
   const [activeTab, setActiveTab] = useState('All vehicles');
+  const [searchTerm, setSearchTerm] = useState('');
   const gridRef = useRef(null);
+  const { user } = useAuth();
+
+  const [carBooking, setCarBooking] = useState({
+    pickupLocation: '',
+    dropoffLocation: '',
+    pickupDate: '',
+    dropoffDate: '',
+    carType: 'All'
+  });
+
+  const handleCarBookingSubmit = async (specificCar = null) => {
+    if (!user) {
+      alert("Veuillez vous connecter pour effectuer une réservation.");
+      return;
+    }
+
+    // On utilise soit la voiture sélectionnée dans la grille, soit le type choisi dans le formulaire
+    const finalCarType = specificCar || carBooking.carType;
+
+    if (!carBooking.pickupLocation || !carBooking.dropoffLocation || !carBooking.pickupDate || !carBooking.dropoffDate) {
+      alert("Veuillez remplir les lieux et les dates dans le formulaire de réservation.");
+      return;
+    }
+
+    const token = localStorage.getItem('authToken');
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/car-rental/book`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ ...carBooking, carType: finalCarType })
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert(`Demande de réservation envoyée pour : ${finalCarType}. Notre équipe vous contactera bientôt.`);
+      } else {
+        alert("Erreur: " + data.message);
+      }
+    } catch (error) {
+      console.error("Booking error:", error);
+      alert("Une erreur est survenue lors de la réservation.");
+    }
+  };
 
   const filteredCars = cars.filter(car => {
-    if (activeTab === 'All vehicles') return true;
-    // Map tab labels to car types if they differ (e.g., 'Suv' vs 'SUV')
-    const typeMap = {
-      'Suv': 'SUV',
-      'Minivan': 'Minivan',
-      'Sedan': 'Sedan',
-      'Pickup': 'Pickup',
-      'Economy': 'Economy',
-      'Cabriolet': 'Cabriolet'
-    };
-    const targetType = typeMap[activeTab] || activeTab;
-    return car.type === targetType;
+    const matchesTab = activeTab === 'All vehicles' || car.type === (activeTab === 'Suv' ? 'SUV' : activeTab);
+    const matchesSearch = car.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesTab && matchesSearch;
   });
 
   useEffect(() => {
@@ -202,7 +241,10 @@ const CarRent = () => {
           <h3>Book your car</h3>
 
           <div className="booking-field">
-            <select defaultValue="">
+            <select 
+              value={carBooking.carType} 
+              onChange={(e) => setCarBooking({...carBooking, carType: e.target.value})}
+            >
               <option value="" disabled>Car type</option>
               <option>Sedan</option>
               <option>SUV</option>
@@ -214,7 +256,10 @@ const CarRent = () => {
           </div>
 
           <div className="booking-field">
-            <select defaultValue="">
+            <select 
+              value={carBooking.pickupLocation}
+              onChange={(e) => setCarBooking({...carBooking, pickupLocation: e.target.value})}
+            >
               <option value="" disabled>Place of rental</option>
               <option>Yaoundé</option>
               <option>Douala</option>
@@ -223,7 +268,10 @@ const CarRent = () => {
           </div>
 
           <div className="booking-field">
-            <select defaultValue="">
+            <select 
+              value={carBooking.dropoffLocation}
+              onChange={(e) => setCarBooking({...carBooking, dropoffLocation: e.target.value})}
+            >
               <option value="" disabled>Place of return</option>
               <option>Yaoundé</option>
               <option>Douala</option>
@@ -232,14 +280,22 @@ const CarRent = () => {
           </div>
 
           <div className="booking-field">
-            <input type="date" placeholder="Rental Date" />
+            <input 
+              type="date" 
+              value={carBooking.pickupDate}
+              onChange={(e) => setCarBooking({...carBooking, pickupDate: e.target.value})}
+            />
           </div>
 
           <div className="booking-field">
-            <input type="date" placeholder="Return Date" />
+            <input 
+              type="date" 
+              value={carBooking.dropoffDate}
+              onChange={(e) => setCarBooking({...carBooking, dropoffDate: e.target.value})}
+            />
           </div>
 
-          <button className="book-now-btn">Book now</button>
+          <button className="book-now-btn" onClick={() => handleCarBookingSubmit()}>Book now</button>
         </div>
       </section>
 
@@ -249,7 +305,12 @@ const CarRent = () => {
           <h2>Select a vehicle group</h2>
           <div className="search-bar">
             <SearchIcon />
-            <input type="text" placeholder="Search your car" />
+            <input 
+              type="text" 
+              placeholder="Search your car" 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
         </div>
 
@@ -291,7 +352,10 @@ const CarRent = () => {
                   <span className="car-feature"><AcIcon /> Air Conditioner</span>
                 </div>
 
-                <button className="view-details-btn">View Details</button>
+                <button 
+                  className="view-details-btn"
+                  onClick={() => handleCarBookingSubmit(car.name)}
+                >Rent Now</button>
               </div>
             ))
           ) : (

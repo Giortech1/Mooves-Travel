@@ -13,9 +13,35 @@ function Contact() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
+    
+    if (!form.name || !form.email || !form.message) {
+      alert("Veuillez remplir tous les champs.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/contact/submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("Votre message a été envoyé avec succès !");
+        setForm({ name: "", email: "", message: "" }); // Réinitialise le formulaire
+      } else {
+        alert("Erreur: " + data.message);
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'envoi du message:", error);
+      alert("Une erreur est survenue. Veuillez réessayer plus tard.");
+    }
   };
 
   return (

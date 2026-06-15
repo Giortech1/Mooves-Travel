@@ -6,6 +6,7 @@ export const authenticateToken = (req, res, next) => {
   const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
   if (!token) {
+    console.log("Authentification: Token manquant dans la requête.");
     return res.status(401).json({
       success: false,
       message: 'Accès refusé. Token manquant.',
@@ -13,10 +14,12 @@ export const authenticateToken = (req, res, next) => {
   }
 
   try {
+    console.log("Authentification: Tentative de vérification du token:", token);
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     req.user = verified;
     next();
   } catch (error) {
+    console.error("Authentification: Erreur de vérification du token:", error.message);
     return res.status(403).json({
       success: false,
       message: 'Token invalide ou expiré.',
