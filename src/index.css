@@ -33,3 +33,22 @@ button {
 input {
   outline: none;
 }
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Global card reveal animation */
+[class*="card"], [class*="Card"] {
+  opacity: 0;
+  transform: translateY(18px) scale(0.99);
+  transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+[class*="card"].reveal, [class*="Card"].reveal {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}

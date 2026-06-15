@@ -46,6 +46,18 @@
   max-width: 900px;
 }
 
+@media (max-width: 600px) {
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-primary, .btn-secondary {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
 .btn-primary {
   background: #2dd4a7;
   color: #fff;
@@ -172,4 +184,53 @@
   .hero-section h1 {
     font-size: 2rem;
   }
+}
+
+.footer {
+  background: #fff;
+  border-top: 4px solid #16a673;
+  padding: 50px 60px 0;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.4fr 1fr;
+  gap: 40px;
+  padding-bottom: 40px;
+}
+
+.footer-logo {
+  height: 36px;
+  margin-bottom: 16px;
+}
+
+.footer-brand p {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .challenges-section, .services-section, .footer {
+    padding: 40px 20px;
+  }
+  
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  border-top: 1px solid #e2e8f0;
+  padding: 16px 0;
 }

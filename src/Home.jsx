@@ -1,33 +1,157 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import './Home.css';
 import Navbar from './Navbar';
 import { useAuth } from './hooks/useAuth.jsx';
 import logo from './assets/logo.png';
-import slide1 from './assets/img slide 1.png';
-import slide2 from './assets/img slide 2.png';
-import slide3 from './assets/img slide 3.png';
-import slide4 from './assets/img slide 4.png';
-import slide5 from './assets/img slide 5.png';
-import img1 from './assets/Img 1.png';
-import img2 from './assets/img 2.jfif';
-import img3 from './assets/img 3.png';
-import img4 from './assets/img 4.jfif';
-import img5 from './assets/img 5.png';
-import img6 from './assets/img 6.jfif';
-import img7 from './assets/img 7.jfif';
-import img8 from './assets/img 8.png';
-import img9 from './assets/img 9.png';
+import {
+  FaFacebookF, FaInstagram, FaTwitter, FaYoutube,
+  FaMapMarkerAlt, FaEnvelope, FaPhoneAlt,
+  FaChevronLeft, FaChevronRight,
+} from "react-icons/fa";
+import heroSlide1 from "./assets/img slide 1.png";
+import heroSlide2 from "./assets/img slide 5.png";
+import heroSlide3 from "./assets/img slide 3.png";
+import cadillac from "./assets/escalade-removebg-preview.png";
+import lamborghini from "./assets/ABT_Lamborghini_Urus_Scatenato_2024-removebg-preview.png";
+import client1 from "./assets/Avatar6.png";
+import client2 from "./assets/ayesha.png";
+import client3 from "./assets/mehak.png";
+import appStore from "./assets/foot1.png";
+import googlePlay from "./assets/foot2.png";
+import car from "./assets/corola toyota.png";
+import visa from "./assets/visa.jpg";
+import driver from "./assets/img 5.png";
+import leasing from "./assets/busines_cooporate-removebg-preview.png";
+import airport from "./assets/plane.jpg";
+import pickup from "./assets/Img 1.png";
+import fleet from "./assets/Creative_Poster_Design-removebg-preview.png";
+import luxury from "./assets/luxury.jpg";
+import fleet1 from "./assets/fleet.jpg";
 
-// Fleet Assets
+const heroSlides = [
+  {
+    img: heroSlide1,
+    title: "Drive Anywhere Across Cameroon & Beyond",
+    text: "Choose from luxury, business, SUV and utility vehicles designed for comfort and adventure, anywhere life takes you.",
+  },
+  {
+    img: heroSlide2,
+    title: "Premium SUVs For Every Occasion",
+    text: "From family trips to executive travel, our SUV fleet combines comfort, space, and reliability.",
+  },
+  {
+    img: heroSlide3,
+    title: "Comfort Meets Performance",
+    text: "Discover our sedan collection, perfect for business travel and city driving in style.",
+  },
+];
 
-import rightArrow from './assets/right arrow.png';
+const services = [
+  {
+    img: car,
+    title: "Car Rental",
+    text: "Choose from a wide range of reliable, luxury, and utility vehicles designed to give you comfort, flexibility, and confidence on every journey.",
+  },
+  {
+    img: visa,
+    title: "Flight Ticketing",
+    text: "Book local and international flights with ease and enjoy a smooth travel experience supported by fast reservations and trusted service.",
+  },
+  {
+    img: driver,
+    title: "Chauffeur Services",
+    text: "Travel in comfort with professional drivers dedicated to providing safe, punctual, and premium transportation experiences.",
+  },
+  {
+    img: leasing,
+    title: "Corporate Vehicle Leasing",
+    text: "Empower your business with flexible vehicle leasing solutions tailored to support company operations, executive travel, and staff mobility.",
+  },
+  {
+    img: airport,
+    title: "Airport Transfer Services",
+    text: "Enjoy stress-free pickups and drop-offs with dependable airport transportation designed for comfort, convenience, and punctuality.",
+  },
+  {
+    img: pickup,
+    title: "Utility & Pickup Vehicle Rental",
+    text: "Get the power and durability you need with utility and pickup vehicles built to handle business operations, logistics, and demanding tasks.",
+  },
+  {
+    img: fleet,
+    title: "Fleet Management Services",
+    text: "Optimize your business transportation with professional fleet management services focused on efficiency, reliability, and operational control.",
+  },
+  {
+    img: luxury,
+    title: "Executive / Luxury Transportation",
+    text: "Experience premium mobility with luxury vehicles and first-class services designed for executives, VIP clients, and special occasions.",
+  },
+  {
+    img: fleet1,
+    title: "Business Mobility Solutions",
+    text: "Simplify corporate transportation through smart mobility services designed to improve productivity, flexibility, and business performance.",
+  },
+];
+
 const LOCATIONS = ["Douala Aéroport (DLA)", "Yaoundé Aéroport (NSI)", "Douala Akwa", "Yaoundé Centre-ville", "Bafoussam", "Kribi", "Limbe"];
 
-const Home = () => {
+const whyChoose = [
+  {
+    color: "#fde0e8",
+    title: "Zero Deposit Required",
+    text: "We know how vital cash flow is for growing businesses. Unlike traditional corporate leasing companies that require hefty upfront deposits, you can get started with a clean, lean and minimal entry fee.",
+  },
+  {
+    color: "#dbe9ff",
+    title: "Maintenance and Servicing are on Us",
+    text: "Managing a fleet means dealing with unpredictable breakdowns. With Mooves, we handle all routine maintenance and scheduled servicing for you.",
+  },
+  {
+    color: "#d6f5ec",
+    title: "Full Commercial Insurance Included",
+    text: "Mooves operate with comprehensive commercial insurance coverage. We've got you covered against unexpected events with zero added insurance stress.",
+  },
+  {
+    color: "#fdf0d6",
+    title: "Flexi-Car Scaling",
+    text: "Markets change quickly, and your fleet should keep up. Add or remove vehicles whenever your business needs change.",
+  },
+  {
+    color: "#fde0e8",
+    title: "High-Efficiency & Electric Options",
+    text: "Choose hybrid, fuel-efficient, or all-electric vehicles tailored to your needs while reducing operational carbon footprint.",
+  },
+  {
+    color: "#e6f4d9",
+    title: "A Clear Path to Asset Equity",
+    text: "Our Drive-to-Own programs let your payments go toward eventual ownership when you decide it's time for your business to own its fleet.",
+  },
+];
+
+const testimonials = [
+  {
+    img: client1,
+    name: "Michael Tchoumi",
+    role: "Business Traveler",
+    text: "Mooves has transformed how we manage transportation for our team. Their fleet is always in excellent condition.",
+  },
+  {
+    img: client2,
+    name: "Giorno Roman",
+    role: "CEO, Bizlocate",
+    text: "I rented an SUV for a week-long trip and was impressed by the vehicle quality and customer service.",
+  },
+  {
+    img: client3,
+    name: "Sarah Nfor",
+    role: "Entrepreneur",
+    text: "Booking my flight and airport transfer through Mooves was effortless. The support team was responsive throughout my journey.",
+  },
+];
+
+function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [vehiclePage, setVehiclePage] = useState(0);
   const [activeService, setActiveService] = useState('car');
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [flightClass, setFlightClass] = useState('Economy');
@@ -36,6 +160,10 @@ const Home = () => {
   const [children, setChildren] = useState(0);
   const [flightResults, setFlightResults] = useState([]);
   const [isSearchingFlights, setIsSearchingFlights] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("All");
+  
+  const { user } = useAuth();
+  
   const [flightSearch, setFlightSearch] = useState({
     from: '',
     to: '',
@@ -43,7 +171,6 @@ const Home = () => {
     returnDate: ''
   });
 
-  const { user } = useAuth();
   const [carBooking, setCarBooking] = useState({
     pickupLocation: '',
     dropoffLocation: '',
@@ -51,9 +178,10 @@ const Home = () => {
     dropoffDate: '',
     carType: 'All'
   });
+
   const [pickupSearch, setPickupSearch] = useState('');
   const [dropoffSearch, setDropoffSearch] = useState('');
-  const [activeDropdown, setActiveDropdown] = useState(null); // 'pickup' or 'dropoff'
+  const [activeDropdown, setActiveDropdown] = useState(null);
   
   const pickupRef = useRef(null);
   const dropoffRef = useRef(null);
@@ -70,208 +198,131 @@ const Home = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const slides = [
-    { image: "" },
-    { image: "" },
-    { image: "" },
-    { image: "" },
-    { image: "" }
-  ];
+  // Auto-rotate carousel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide(prev => (prev === heroSlides.length - 1 ? 0 : prev + 1));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
-  const fleetRef = useRef(null);
+  const handleCarBookingSubmit = async () => {
+    if (!user) {
+      alert("Veuillez vous connecter pour effectuer une réservation.");
+      return;
+    }
+    if (!carBooking.pickupLocation || !carBooking.dropoffLocation || !carBooking.pickupDate || !carBooking.dropoffDate) {
+      alert("Veuillez remplir tous les champs de location.");
+      return;
+    }
 
-  const scrollFleet = (direction) => {
-    if (fleetRef.current) {
-      const { scrollLeft, clientWidth } = fleetRef.current;
-      const scrollTo = direction === 'left' ? scrollLeft - clientWidth / 2 : scrollLeft + clientWidth / 2;
-      fleetRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
+    const token = localStorage.getItem('authToken');
+    console.log("Token envoyé pour la réservation:", token);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/car-rental/book`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(carBooking)
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert("Votre demande de location a été enregistrée ! L'admin vous contactera.");
+        // Réinitialiser le formulaire
+        setCarBooking({
+          pickupLocation: '',
+          dropoffLocation: '',
+          pickupDate: '',
+          dropoffDate: '',
+          carType: 'All'
+        });
+      } else {
+        alert("Erreur: " + data.message);
+      }
+    } catch (error) {
+      console.error("Booking error:", error);
+      alert("Une erreur est survenue lors de l'envoi de la demande.");
     }
   };
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [slides.length]);
+  const handleFlightSearch = async () => {
+    if (!flightSearch.from || !flightSearch.to || !flightSearch.departureDate) {
+      alert("Veuillez remplir au moins le départ, l'arrivée et la date de départ.");
+      return;
+    }
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    setIsSearchingFlights(true);
+    try {
+      const queryParams = new URLSearchParams({
+        from: flightSearch.from,
+        to: flightSearch.to,
+        date: flightSearch.departureDate,
+        class: flightClass
+      });
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/flights/search?${queryParams}`);
+      const data = await response.json();
+      setFlightResults(data.success ? data.flights : []);
+    } catch (error) {
+      console.error("Flight search error:", error);
+    } finally {
+      setIsSearchingFlights(false);
+    }
+  };
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    setCurrentSlide((prev) => (prev === 0 ? heroSlides.length - 1 : prev - 1));
   };
 
-  const services = [
-    {
-      id: 1,
-      title: "Car Rental",
-      description: "Choose from a wide range of reliable, luxury, and utility vehicles designed to give you comfort, flexibility, and confidence on every journey.",
-      image: img1,
-      link: "/explore-fleet"
-    },
-    {
-      id: 2,
-      title: "Flight ticketing",
-      description: "Book local and international flights with ease and enjoy a smooth travel experience supported by fast reservations and trusted service.",
-      image: img2,
-      link: "#"
-    },
-    {
-      id: 3,
-      title: "Chauffeur Service",
-      description: "Travel in comfort with professional drivers dedicated to providing safe, punctual, and premium transportation experiences.",
-      image: img3,
-      link: "#"
-    },
-    {
-      id: 4,
-      title: "Corporate Vehicle Leasing",
-      description: "Empower your business with flexible vehicle leasing solutions tailored to support company operations, executive travel, and staff mobility.",
-      image: img4,
-      link: "#"
-    },
-    {
-      id: 5,
-      title: "Airport Transfer Services",
-      description: "Enjoy stress-free pickups and drop-offs with dependable airport transportation designed for comfort, convenience, and punctuality.",
-      image: img5,
-      link: "#"
-    },
-    {
-      id: 6,
-      title: "Utility & Pickup Vehicle Rental",
-      description: "Get the power and durability you need with utility and pickup vehicles built to handle business operations, logistics, and demanding tasks.",
-      image: img6,
-      link: "#"
-    },
-    {
-      id: 7,
-      title: "Fleet Management Services",
-      description: "Optimize your business transportation with professional fleet management solutions focused on efficiency, reliability, and operational control.",
-      image: img7,
-      link: "#"
-    },
-    {
-      id: 8,
-      title: "Executive / Luxury Transportation",
-      description: "Experience premium mobility with luxury vehicles and first-class services designed for executives, VIP clients, and special occasions.",
-      image: img8,
-      link: "#"
-    },
-    {
-      id: 9,
-      title: "Business Mobility Solutions",
-      description: "Simplify corporate transportation through smart mobility services designed to improve productivity, flexibility, and business performance.",
-      image: img9,
-      link: "#"
-    }
-  ];
-
-  const vehicles = [
-  { id: 1, name: "Cadillac Escalade", price: "$450/day", seats: 7, transmission: "Automatic", fuel: "Gasoline", category: ["all", "suv"],     image: slide1 },
-  { id: 2, name: "Lamborghini Urus",  price: "$500/day", seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "luxury"],  image: slide2 },
-  { id: 3, name: "Mercedes S-Class",  price: "$380/day", seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "luxury"],  image: slide3 },
-  { id: 4, name: "Range Rover Sport", price: "$420/day", seats: 7, transmission: "Automatic", fuel: "Diesel",   category: ["all", "suv"],     image: slide4 },
-  { id: 5, name: "Toyota Hilux",      price: "$180/day", seats: 5, transmission: "Manual",    fuel: "Diesel",   category: ["all", "pickup"],  image: slide5 },
-  { id: 6, name: "Toyota Corolla",    price: "$90/day",  seats: 5, transmission: "Automatic", fuel: "Gasoline", category: ["all", "economy"], image: slide1 },
-];
-
-const handleCarBookingSubmit = async () => {
-  if (!user) {
-    alert("Veuillez vous connecter pour effectuer une réservation.");
-    return;
-  }
-  if (!carBooking.pickupLocation || !carBooking.dropoffLocation || !carBooking.pickupDate || !carBooking.dropoffDate) {
-    alert("Veuillez remplir tous les champs de location.");
-    return;
-  }
-
-  const token = localStorage.getItem('authToken');
-  console.log("Token envoyé pour la réservation:", token);
-
-  console.log("Tentative d'envoi de la réservation:", carBooking);
-
-  try {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/car-rental/book`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(carBooking)
-    });
-    const data = await response.json();
-    if (data.success) {
-      alert("Votre demande de location a été enregistrée ! L'admin vous contactera.");
-    } else {
-      alert("Erreur: " + data.message);
-    }
-  } catch (error) {
-    console.error("Booking error:", error);
-    alert("Une erreur est survenue lors de l'envoi de la demande.");
-  }
-};
-
-const handleFlightSearch = async () => {
-  if (!flightSearch.from || !flightSearch.to || !flightSearch.departureDate) {
-    alert("Veuillez remplir au moins le départ, l'arrivée et la date de départ.");
-    return;
-  }
-
-  setIsSearchingFlights(true);
-  try {
-    // Simulation ou appel API réel vers ton backend
-    const queryParams = new URLSearchParams({
-      from: flightSearch.from,
-      to: flightSearch.to,
-      date: flightSearch.departureDate,
-      class: flightClass
-    });
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/flights/search?${queryParams}`);
-    const data = await response.json();
-    setFlightResults(data.success ? data.flights : []);
-  } catch (error) {
-    console.error("Flight search error:", error);
-  } finally {
-    setIsSearchingFlights(false);
-  }
-};
-
-const filteredVehicles = vehicles.filter(v => v.category.includes(activeCategory));
-const totalPages = Math.ceil(filteredVehicles.length / 2);
-const visibleVehicles = filteredVehicles.slice(vehiclePage * 2, vehiclePage * 2 + 2);
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev === heroSlides.length - 1 ? 0 : prev + 1));
+  };
 
   return (
-    <div className="home-container">
+    <div className="home-page">
       <Navbar />
 
-      <section className="hero">
-        <div className="slider">
-          <button className="slider-btn prev" onClick={prevSlide}>&#10094;</button>
-          <button className="slider-btn next" onClick={nextSlide}>&#10095;</button>
-          
-          {slides.map((_, index) => (
-            <div
-              key={index}
-              className={`slide ${index === currentSlide ? 'active' : ''}`}
-            >
+      {/* HERO SLIDER */}
+      <section className="hero-slider">
+        {heroSlides.map((slide, index) => (
+          <div
+            key={index}
+            className={`hero-slide ${index === currentSlide ? "active" : ""}`}
+          >
+            <img src={slide.img} alt={slide.title} className="hero-img" />
+            <div className="hero-overlay">
+              <h1>{slide.title}</h1>
+              <p>{slide.text}</p>
+              <button className="btn-explore">Explore Fleet</button>
             </div>
-          ))}
-
-          <div className="slider-dots">
-            {slides.map((_, index) => (
-              <span
-                key={index}
-                className={`dot ${index === currentSlide ? 'active' : ''}`}
-                onClick={() => setCurrentSlide(index)}
-              ></span>
-            ))}
           </div>
+        ))}
+
+        <button className="slider-arrow left" onClick={prevSlide}>
+          <FaChevronLeft />
+        </button>
+        <button className="slider-arrow right" onClick={nextSlide}>
+          <FaChevronRight />
+        </button>
+
+        <div className="slider-dots">
+          {heroSlides.map((_, index) => (
+            <span
+              key={index}
+              className={`dot ${index === currentSlide ? "active" : ""}`}
+              onClick={() => goToSlide(index)}
+            ></span>
+          ))}
         </div>
       </section>
 
+      {/* SEARCH SECTION */}
       <section className="search-section">
         <div className="service-tabs">
           <button 
@@ -464,6 +515,7 @@ const visibleVehicles = filteredVehicles.slice(vehiclePage * 2, vehiclePage * 2 
         </div>
       </section>
 
+      {/* FLIGHT RESULTS */}
       {activeService === 'flight' && flightResults.length > 0 && (
         <section className="flight-results-container" style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
           <h2 className='section-text'>Available Tickets</h2>
@@ -485,179 +537,209 @@ const visibleVehicles = filteredVehicles.slice(vehiclePage * 2, vehiclePage * 2 
         </section>
       )}
 
-      <section className="featured">
-        <div className="section-header">
-          <h2 className="section-text">OUR SERVICES</h2>
-          <p>With years of experience and a dedicated team, we provide <br /><strong className='s-strong'>Premium mobility</strong> solutions designed for <strong className='s-strong'>comfort, reliability, and exceptional service.</strong></p>
-        </div>
-          <div className="destinations-grid">
-          {services.slice(0, 4).map((service) => (
-            <div key={service.id} className="dest-card">
-              <div className="dest-image" style={{ backgroundImage: `url(${service.image})` }}></div>
-              <div className="dest-info">
-                <h3 className='section-text'>{service.title}</h3>
-                <p>{service.description}</p>
+      {/* SERVICES */}
+      <section className="services-section">
+        <h2>Our <span>Services</span></h2>
+        <p className="services-subtitle">
+          With years of experience and a dedicated team, we provide{' '}
+          <span className="highlight">Premium mobility</span> solutions
+          designed for <span className="highlight">comfort, reliability, and exceptional service.</span>
+        </p>
+
+        <div className="services-grid">
+          {services.map((s, i) => (
+            <div className="service-card" key={i}>
+              <img src={s.img} alt={s.title} className="service-img" />
+              <div className="service-content">
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+                <a href="#" className="view-all">View All</a>
               </div>
-            </div>))}
+            </div>
+          ))}
         </div>
       </section>
 
-      <section className="home-fleet-section">
-        <div className="fleet-container-inner" ref={fleetRef}>
-          <div className="fleet-header-right">
-            <h2>Explore Our Premium Vehicle Collection</h2>
-            <div className="fleet-divider"></div>
-          </div>
-          <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide2})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Flight Ticketing</h3>
-              <p>Book local and international flights with ease and enjoy a smooth travel experience supported by fast reservations and trusted service.</p>
-            </div>
-          </div>
-          <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Driver Services</h3>
-              <p>Travel in comfort with professional drivers dedicated to providing safe, punctual, and premium transportation experiences.</p>
-            </div>
-          </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Corporate Vehicle Leasing</h3>
-              <p>Empower your business with flexible vehicle leasing solutions tailored to support company operations, executive travel, and staff mobility.</p>
-            </div>
-          </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>AirPort Transfer Service</h3>
-              <p>Enjoy stress-free pickups and drop-offs with dependable airport transportation designed for comfort, convenience, and punctuality.</p>
-            </div>
-          </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Utility & Pickup Vehicle</h3>
-              <p>Get the power and durability you need with utility and pickup vehicles built to handle business operations, logistics, and demanding tasks.</p>
-            </div>
-          </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Fleet Management Services</h3>
-              <p>Optimize your business transportation with professional fleet management solutions focused on efficiency, reliability, and operational control.</p>
-            </div>
-          </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Tokyo, Japan</h3>
-              <p>Where tradition meets technology.</p>
-            </div>
+      {/* VEHICLE COLLECTION */}
+      <section className="collection-section">
+        <h2>Explore Our Premium Vehicle Collection</h2>
 
-            <button className="fleet-arrow next" onClick={() => scrollFleet('right')}>
-              <img src={rightArrow} alt="Next" />
-            </button>
-          </div>
-          
-          <div className="fleet-footer-link">
-            <Link to="/explore-fleet" className="view-all-fleet">View all vehicles</Link>
-          </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Executive/ Luxury Transportation</h3>
-              <p>Experience premium mobility with luxury vehicles and first-class services designed for executives, VIP clients, and special occasions.</p>
+        <div className="collection-filters">
+          {["All", "Luxury", "SUVs", "Economy", "Pickup"].map((f) => (
+            <span
+              key={f}
+              className={activeFilter === f ? "active" : ""}
+              onClick={() => setActiveFilter(f)}
+            >
+              {f}
+            </span>
+          ))}
+        </div>
+
+        <div className="collection-grid">
+          <div className="collection-card">
+            <img src={cadillac} alt="Cadillac Escalade" />
+            <div className="collection-info">
+              <div>
+                <h4>Cadillac Escalade</h4>
+                <span className="price">$450/day</span>
+              </div>
+              <div className="collection-meta">
+                <span>5 seats</span>
+                <span>Automatic</span>
+                <span>Complete</span>
+              </div>
+              <button className="btn-rent">Rent Now</button>
             </div>
           </div>
-           <div className="dest-card">
-            <div className="dest-image" style={{ backgroundImage: `url(${slide3})` }}></div>
-            <div className="dest-info">
-              <h3 className='section-text'>Business Mobility Solutions</h3>
-              <p>Simplify corporate transportation through smart mobility services designed to improve productivity, flexibility, and business performance.</p>
+
+          <div className="collection-card">
+            <img src={lamborghini} alt="Lamborghini Urus" />
+            <div className="collection-info">
+              <div>
+                <h4>Lamborghini Urus</h4>
+                <span className="price">$590/day</span>
+              </div>
+              <div className="collection-meta">
+                <span>5 seats</span>
+                <span>Automatic</span>
+                <span>Complete</span>
+              </div>
+              <button className="btn-rent">Rent Now</button>
             </div>
           </div>
         </div>
       </section>
-      <section className="premium-content">
-  <div className='premium-service'>
-    <h2 className='premium-text'>Explore Our Premium Vehicle Collection</h2>
-    <hr className='white-line'/>
 
-    <div className='vehicle-categories'>
-      {["all", "luxury", "suv", "economy", "pickup"].map(cat => (
-        <button
-          key={cat}
-          className={activeCategory === cat ? "active-btn" : ""}
-          onClick={() => { setActiveCategory(cat); setVehiclePage(0); }}
-        >
-          {cat === "all" ? "All" : cat === "suv" ? "SUVs" : cat.charAt(0).toUpperCase() + cat.slice(1)}
-        </button>
-      ))}
-    </div>
+      {/* WHY CHOOSE US */}
+      <section className="why-choose-section">
+        <h2>Why Choose Us</h2>
+        <p className="why-subtitle">
+          Flexible mobility solutions designed to give you flexibility, and
+          peace of mind whether you're renting a vehicle, managing
+          transportation, or booking your next trip.
+        </p>
 
-    <div className='vehicle-grid'>
-      {visibleVehicles.map(vehicle => (
-        <div key={vehicle.id} className='vehicle-card'>
-          <h3 className='vehicle-name'>{vehicle.name}</h3>
-          <p className='vehicle-price'>{vehicle.price}</p>
-          <div className='vehicle-img' style={{ backgroundImage: `url(${vehicle.image})` }}></div>
-          <div className='vehicle-footer'>
-            <div className='vehicle-specs'>
-              <span>{vehicle.seats} seats</span>
-              <span>{vehicle.transmission}</span>
-              <span>{vehicle.fuel}</span>
+        <div className="why-grid">
+          {whyChoose.map((item, i) => (
+            <div className="why-card" key={i}>
+              <div className="why-icon" style={{ background: item.color }}></div>
+              <h4>{item.title}</h4>
+              <p>{item.text}</p>
             </div>
-            <button className='rent-btn'>
-              Rent Now <span className='rent-icon'>↗</span>
-            </button>
-          </div>
+          ))}
         </div>
-      ))}
-    </div>
+      </section>
 
-    <div className='vehicle-nav'>
-      <button
-        className='nav-arrow'
-        onClick={() => setVehiclePage(p => Math.max(0, p - 1))}
-        disabled={vehiclePage === 0}
-      >←</button>
-      <button
-        className='nav-arrow'
-        onClick={() => setVehiclePage(p => Math.min(totalPages - 1, p + 1))}
-        disabled={vehiclePage >= totalPages - 1}
-      >→</button>
-    </div>
-  </div>
-</section>
+      {/* TESTIMONIALS */}
+      <section className="testimonials-section">
+        <h2>What Our Clients Say</h2>
+        <p className="testimonials-subtitle">
+          Discover why individuals, professionals, and businesses trust
+          Mooves for reliable mobility, vehicle rental, and travel solutions.
+        </p>
+
+        <div className="testimonials-grid">
+          {testimonials.map((t, i) => (
+            <div className="testimonial-card" key={i}>
+              <img src={t.img} alt={t.name} className="testimonial-avatar" />
+              <h4>{t.name}</h4>
+              <span className="testimonial-role">{t.role}</span>
+              <p>{t.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FOOTER */}
       <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-logo">
-            <img src={logo} alt="Mooves Logo" />
-            <p>Mooves Travel - Your ultimate travel companion.</p>
+        <div className="footer-grid">
+          <div className="footer-brand">
+            <img src={logo} alt="Mooves Logo" className="footer-logo" />
+            <p>
+              Premium mobility, vehicle rental, fleet management, and
+              ticketing solutions designed to deliver comfort, flexibility,
+              and reliability.
+            </p>
+
+            <h4>Download App</h4>
+            <div className="app-buttons">
+              <img src={appStore} alt="App Store" />
+              <img src={googlePlay} alt="Google Play" />
+            </div>
+
+            <div className="social-icons">
+              <FaFacebookF />
+              <FaInstagram />
+              <FaTwitter />
+              <FaYoutube />
+            </div>
           </div>
-          <div className="footer-links">
-            <h4>Quick Links</h4>
+
+          <div className="footer-col">
+            <h4 className="footer-heading">
+              <FaMapMarkerAlt /> Address
+            </h4>
+            <p>BP 482 Douala - Makepe montée BM</p>
+
+            <h4 className="footer-heading green">Quick Links</h4>
             <ul>
-              <li><Link to="/">Home</Link></li>
-              <li><a href="#destination">Destination</a></li>
-              <li><a href="#packages">Packages</a></li>
+              <li>Home</li>
+              <li>Car Rents</li>
+              <li>Business Solution</li>
+              <li>Flight Booking</li>
+              <li>Fleet</li>
+              <li>About Us</li>
+              <li>Contact</li>
             </ul>
           </div>
-          <div className="footer-contact">
-            <h4>Contact Us</h4>
-            <p>Email: info@moovestravel.com</p>
-            <p>Phone: +1 234 567 890</p>
+
+          <div className="footer-col">
+            <h4 className="footer-heading">
+              <FaEnvelope /> Email
+            </h4>
+            <p>business@moove-location.com</p>
+
+            <h4 className="footer-heading green">Services</h4>
+            <ul>
+              <li>Car Rental</li>
+              <li>Flight Ticketing</li>
+              <li>Chauffeur Services</li>
+              <li>Corporate Vehicle Leasing</li>
+              <li>Airport Transfer Service</li>
+              <li>Utility Pickup Vehicle Rental</li>
+              <li>Fleet Management Service</li>
+              <li>Executive/Luxury Transportation</li>
+              <li>Business Mobility Solution</li>
+            </ul>
+          </div>
+
+          <div className="footer-col">
+            <h4 className="footer-heading">
+              <FaPhoneAlt /> Phone
+            </h4>
+            <p>
+              +237 653 1716 34 <br /> 692 38 29 17
+            </p>
+
+            <h4 className="footer-heading green">Support</h4>
+            <ul>
+              <li>Help Center</li>
+              <li>FAQs</li>
+              <li>Terms &amp; Conditions</li>
+              <li>Privacy Policy</li>
+              <li>Booking Policy</li>
+              <li>Customer Support</li>
+            </ul>
           </div>
         </div>
+
         <div className="footer-bottom">
-          <p>&copy; 2026 Mooves Travel. All rights reserved.</p>
+          © 2026 Mooves Travel and Location. All Rights Reserved.
         </div>
       </footer>
     </div>
   );
-};
+}
 
 export default Home;

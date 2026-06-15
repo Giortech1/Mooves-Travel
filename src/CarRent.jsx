@@ -1,14 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+
+import { useState, useEffect, useRef } from 'react';
+// Link not used in this component
 import './CarRent.css';
 import Navbar from './Navbar';
+import { useAuth } from './hooks/useAuth.jsx';
 import img1 from './assets/corola toyota.png';
 import img2 from './assets/car1.png';
 import img3 from './assets/2020_Mercedes-Benz_AMG_S_65-removebg-preview.png';
 import img4 from './assets/escalade-removebg-preview.png';
 import img5 from './assets/RAV4___TOYOTA_The_SUV__Redefined_-removebg-preview.png';
 import img6 from './assets/img 8.png';
-import img7 from './assets/img 1.png';
+import img7 from './assets/Img 1.png';
 import img8 from './assets/foot1.png';
 import img9 from './assets/foot2.png';
 import img10 from './assets/foot3.png';
@@ -144,6 +146,76 @@ const filterTabs = [
 
 // ── Component ───────────────────────────────────────────────────────
 const CarRent = () => {
+  const [activeTab, setActiveTab] = useState('All vehicles');
+  const [searchTerm, setSearchTerm] = useState('');
+  const gridRef = useRef(null);
+  const { user } = useAuth();
+
+  const [carBooking, setCarBooking] = useState({
+    pickupLocation: '',
+    dropoffLocation: '',
+    pickupDate: '',
+    dropoffDate: '',
+    carType: 'All'
+  });
+
+  const handleCarBookingSubmit = async (specificCar = null) => {
+    if (!user) {
+      alert("Veuillez vous connecter pour effectuer une réservation.");
+      return;
+    }
+
+    // On utilise soit la voiture sélectionnée dans la grille, soit le type choisi dans le formulaire
+    const finalCarType = specificCar || carBooking.carType;
+
+    if (!carBooking.pickupLocation || !carBooking.dropoffLocation || !carBooking.pickupDate || !carBooking.dropoffDate) {
+      alert("Veuillez remplir les lieux et les dates dans le formulaire de réservation.");
+      return;
+    }
+
+    const token = localStorage.getItem('authToken');
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/car-rental/book`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ ...carBooking, carType: finalCarType })
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert(`Demande de réservation envoyée pour : ${finalCarType}. Notre équipe vous contactera bientôt.`);
+      } else {
+        alert("Erreur: " + data.message);
+      }
+    } catch (error) {
+      console.error("Booking error:", error);
+      alert("Une erreur est survenue lors de la réservation.");
+    }
+  };
+
+  const filteredCars = cars.filter(car => {
+    const matchesTab = activeTab === 'All vehicles' || car.type === (activeTab === 'Suv' ? 'SUV' : activeTab);
+    const matchesSearch = car.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesTab && matchesSearch;
+  });
+
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+
+    // Reset animation class when tab changes to re-trigger staggered reveal
+    el.classList.remove('animate');
+    // Small timeout to ensure the DOM has updated with filtered items
+    const timer = setTimeout(() => {
+      el.classList.add('animate');
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, [activeTab]);
+
   return (
     <div className="car-rent-container">
       <div>
@@ -169,7 +241,10 @@ const CarRent = () => {
           <h3>Book your car</h3>
 
           <div className="booking-field">
-            <select defaultValue="">
+            <select 
+              value={carBooking.carType} 
+              onChange={(e) => setCarBooking({...carBooking, carType: e.target.value})}
+            >
               <option value="" disabled>Car type</option>
               <option>Sedan</option>
               <option>SUV</option>
@@ -181,7 +256,10 @@ const CarRent = () => {
           </div>
 
           <div className="booking-field">
-            <select defaultValue="">
+            <select 
+              value={carBooking.pickupLocation}
+              onChange={(e) => setCarBooking({...carBooking, pickupLocation: e.target.value})}
+            >
               <option value="" disabled>Place of rental</option>
               <option>Yaoundé</option>
               <option>Douala</option>
@@ -190,7 +268,10 @@ const CarRent = () => {
           </div>
 
           <div className="booking-field">
-            <select defaultValue="">
+            <select 
+              value={carBooking.dropoffLocation}
+              onChange={(e) => setCarBooking({...carBooking, dropoffLocation: e.target.value})}
+            >
               <option value="" disabled>Place of return</option>
               <option>Yaoundé</option>
               <option>Douala</option>
@@ -199,14 +280,22 @@ const CarRent = () => {
           </div>
 
           <div className="booking-field">
-            <input type="date" placeholder="Rental Date" />
+            <input 
+              type="date" 
+              value={carBooking.pickupDate}
+              onChange={(e) => setCarBooking({...carBooking, pickupDate: e.target.value})}
+            />
           </div>
 
           <div className="booking-field">
-            <input type="date" placeholder="Return Date" />
+            <input 
+              type="date" 
+              value={carBooking.dropoffDate}
+              onChange={(e) => setCarBooking({...carBooking, dropoffDate: e.target.value})}
+            />
           </div>
 
-          <button className="book-now-btn">Book now</button>
+          <button className="book-now-btn" onClick={() => handleCarBookingSubmit()}>Book now</button>
         </div>
       </section>
 
@@ -216,16 +305,22 @@ const CarRent = () => {
           <h2>Select a vehicle group</h2>
           <div className="search-bar">
             <SearchIcon />
-            <input type="text" placeholder="Search your car" />
+            <input 
+              type="text" 
+              placeholder="Search your car" 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
         </div>
 
         {/* Filter Tabs */}
         <div className="filter-tabs">
-          {filterTabs.map((tab, i) => (
+          {filterTabs.map((tab) => (
             <button
               key={tab.label}
-              className={`filter-tab ${i === 0 ? 'active' : ''}`}
+              className={`filter-tab ${activeTab === tab.label ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.label)}
             >
               {tab.icon && tab.icon}
               {tab.label}
@@ -234,31 +329,40 @@ const CarRent = () => {
         </div>
 
         {/* Car Grid */}
-        <div className="car-grid">
-          {cars.map(car => (
-            <div key={car.id} className="car-card">
-              <img src={car.image} alt={car.name} />
+        <div className="car-grid" ref={gridRef}>
+          {filteredCars.length > 0 ? (
+            filteredCars.map(car => (
+              <div key={car.id} className="car-card">
+                <img src={car.image} alt={car.name} />
 
-              <div className="car-info">
-                <div>
-                  <div className="car-name">{car.name}</div>
-                  <div className="car-type">{car.type}</div>
+                <div className="car-info">
+                  <div>
+                    <div className="car-name">{car.name}</div>
+                    <div className="car-type">{car.type}</div>
+                  </div>
+                  <div className="car-price">
+                    <span className="price">${car.price}</span>
+                    <span className="per-day">per day</span>
+                  </div>
                 </div>
-                <div className="car-price">
-                  <span className="price">${car.price}</span>
-                  <span className="per-day">per day</span>
+
+                <div className="car-features">
+                  <span className="car-feature"><GearIcon /> Automat</span>
+                  <span className="car-feature"><FuelIcon /> PB 95</span>
+                  <span className="car-feature"><AcIcon /> Air Conditioner</span>
                 </div>
-              </div>
 
-              <div className="car-features">
-                <span className="car-feature"><GearIcon /> Automat</span>
-                <span className="car-feature"><FuelIcon /> PB 95</span>
-                <span className="car-feature"><AcIcon /> Air Conditioner</span>
+                <button 
+                  className="view-details-btn"
+                  onClick={() => handleCarBookingSubmit(car.name)}
+                >Rent Now</button>
               </div>
-
-              <button className="view-details-btn">View Details</button>
+            ))
+          ) : (
+            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px 0' }}>
+              <h3 style={{ color: '#6b7280', fontWeight: 500 }}>No vehicles found in this category.</h3>
             </div>
-          ))}
+          )}
         </div>
       </section>
 

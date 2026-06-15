@@ -1,0 +1,386 @@
+.about-page {
+  font-family: 'Poppins', sans-serif;
+  color: #1e293b;
+  padding-top: 90px; /* clear fixed navbar */
+}
+
+/* HERO */
+.about-hero {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  padding: 60px 20px;
+  background-color: #0f172a;
+}
+
+.about-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 84, 60, 0.6), rgba(20, 84, 60, 0.9));
+}
+
+.about-hero-overlay {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  color: #fff;
+}
+
+.about-hero-overlay h1 {
+  color: #ea7c07;
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.about-hero-overlay p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* WHO WE ARE */
+.who-we-are {
+  background: #14543c;
+  border: 4px solid #2563eb;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  padding: 60px;
+}
+
+.who-content {
+  flex: 1 1 50%;
+}
+
+.badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.who-content h2 {
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+
+.who-content > p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  opacity: 0.9;
+  max-width: 500px;
+  margin-bottom: 30px;
+}
+
+.who-features {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.who-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 220px;
+}
+
+.feature-icon {
+  font-size: 1.4rem;
+  color: #f6b93b;
+  margin-top: 4px;
+}
+
+.who-feature h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.who-feature p {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+.btn-services {
+  background: #f6b93b;
+  color: #1e293b;
+  border: none;
+  padding: 14px 36px;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* WHO IMAGE */
+.who-image {
+  flex: 1 1 40%;
+  position: relative;
+}
+
+.who-image img {
+  width: 100%;
+  border-radius: 12px;
+  display: block;
+  object-fit: cover;
+}
+
+.who-image-card {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #1e293b;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 80%;
+  max-width: 240px;
+  text-align: center;
+  z-index: 3;
+}
+
+.who-image-card .lorem {
+  color: #2563eb;
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+  font-style: italic;
+}
+
+.who-image-card h4 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.who-image-card .card-text {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* TESTIMONIALS */
+.testimonials {
+  text-align: center;
+  padding: 80px 60px 60px;
+}
+
+.testimonials h2 {
+  color: #14543c;
+  font-size: 1.6rem;
+  font-weight: 800;
+  max-width: 700px;
+  margin: 0 auto 50px;
+  line-height: 1.4;
+}
+
+.testimonial-grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 60px 30px;
+}
+
+.testimonial-card {
+  width: 300px;
+  height: 300px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 40px 24px 24px;
+  position: relative;
+  background: #fff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.testimonial-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #fcd9a8;
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.testimonial-card h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 16px 0 8px;
+}
+
+.testimonial-card p {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+/* FOOTER */
+.footer {
+  background: #fff;
+  border-top: 4px solid #16a673;
+  padding: 50px 60px 0;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.4fr 1fr;
+  gap: 40px;
+  padding-bottom: 40px;
+}
+
+.footer-logo {
+  height: 36px;
+  margin-bottom: 16px;
+}
+
+.footer-brand p {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.footer-brand h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.app-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  max-width: 150px;
+}
+
+.app-buttons img {
+  width: 100%;
+}
+
+.social-icons {
+  display: flex;
+  gap: 12px;
+}
+
+.social-icons svg {
+  background: #f1f5f9;
+  padding: 8px;
+  border-radius: 50%;
+  font-size: 1.6rem;
+  color: #1e293b;
+  cursor: pointer;
+}
+
+.footer-col h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #16a673;
+  margin: 0 0 8px;
+}
+
+.footer-col h4:not(:first-child) {
+  margin-top: 20px;
+}
+
+.footer-col p {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-col ul li {
+  font-size: 0.85rem;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.footer-col ul li:hover {
+  color: #16a673;
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  border-top: 1px solid #e2e8f0;
+  padding: 16px 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .who-we-are {
+    flex-direction: column;
+    padding: 50px 30px;
+  }
+
+  .who-image-card {
+    left: 20px;
+  }
+
+  .testimonial-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .who-we-are {
+    padding: 40px 20px;
+  }
+
+  .who-features {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .who-image-card {
+    position: static;
+    margin-top: 20px;
+    max-width: 100%;
+  }
+
+  .testimonials {
+    padding: 60px 20px 40px;
+  }
+
+  .footer {
+    padding: 40px 20px 0;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+}

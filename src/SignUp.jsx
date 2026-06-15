@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './Login.css'; // Reusing styles where possible
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth.jsx';
 import './Login.css';
